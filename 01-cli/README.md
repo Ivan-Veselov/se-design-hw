@@ -23,8 +23,9 @@
 ## Архитектура
 
 Результатом выполнения команды является объект типа `ExecutionResult`. Результат выполнения команды представляет из себя текстовый вывод команды и флаг, который означает нужно ли завершать сеанс.
+
 <p align="center">
-![](images/ExecutionResult.png) 
+<img src="images/ExecutionResult.png" />
 </p> 
 
 Абстракцией для команды-утилиты (именованная команда) является интерфейс `Utility`. Утилита для своего исполнения принимает аргументы и содержимое входного потока.
@@ -35,7 +36,7 @@
 
 А абстракцией для команды, которая может быть скомбинирована с другими и выполнена в некотором окружении, является интерфейс `Command`.
 <p align="center">
-![](images/execution.png)
+<img src="images/execution.png" />
 </p> 
 
 ***
@@ -48,14 +49,14 @@
 
 `StandartCommandStringPreprocessor` &mdash; стандартный `CommandStringPreprocessor`.
 <p align="center">
-![](images/preprocessing.png)
+<img src="images/preprocessing.png" />
 </p> 
 
 ***
 
 `Tokenizer` &mdash; интерфейс для объектов, которые разбивают `CommandString` на последовательность токенов.
 <p align="center">
-![](images/tokenization.png)
+<img src="images/tokenization.png" />
 </p> 
 
 ***
@@ -68,7 +69,7 @@
 
 У `DelegatingCommandCompiler` и `SpecificCommandCompiler` есть специальные расширяющие методы, которые позволяют комбинировать их с другими компиляторами.
 <p align="center">
-![](images/compilation.png)
+<img src="images/compilation.png" />
 </p> 
 
 ***
@@ -79,5 +80,5 @@
 
 `CommandLineInterface` &mdash; консольный REPL интерфейс для исполнения команд.
 <p align="center">
-![](images/GlobalStack.png)
+<img src="images/GlobalStack.png" />
 </p> 
