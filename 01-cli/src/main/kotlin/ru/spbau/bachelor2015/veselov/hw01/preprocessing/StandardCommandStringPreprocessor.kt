@@ -1,8 +1,8 @@
 package ru.spbau.bachelor2015.veselov.hw01.preprocessing
 
 /**
- * A standard command string preprocessor which makes everything inside double or single quotes
- * as escaped characters. Quotes inside other quotes will also be escaped. Double quotes does not
+ * A standard command string preprocessor which makes every character inside double or single
+ * quotes escaped. Quotes inside other quotes will also be escaped. Double quotes does not
  * escape '$' character.
  */
 object StandardCommandStringPreprocessor : CommandStringPreprocessor {
