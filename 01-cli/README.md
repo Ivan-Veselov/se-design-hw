@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Ivan-Veselov/se-design-hw.svg?branch=01-cli)](https://travis-ci.org/Ivan-Veselov/se-design-hw)
+
 # Описание
 
 ## Синтаксис и семантика
