@@ -6,10 +6,13 @@ package ru.spbau.bachelor2015.veselov.hw01.preprocessing
  * escape '$' character.
  */
 object StandardCommandStringPreprocessor : CommandStringPreprocessor {
+    /**
+     * @inheritDoc
+     */
     override fun process(string: String): CommandString {
         var escaping = ESCAPING.NON
 
-        return string.map {
+        val result = string.map {
             val isEscaped =
             when (escaping) {
                 ESCAPING.NON -> {
@@ -51,6 +54,12 @@ object StandardCommandStringPreprocessor : CommandStringPreprocessor {
 
             CommandCharacter(it, isEscaped)
         }
+
+        if (escaping != ESCAPING.NON) {
+            throw UnmatchedQuoteException()
+        }
+
+        return result
     }
 
     private enum class ESCAPING {

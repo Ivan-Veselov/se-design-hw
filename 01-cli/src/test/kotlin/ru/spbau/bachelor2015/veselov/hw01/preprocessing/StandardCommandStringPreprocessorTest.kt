@@ -51,6 +51,16 @@ class StandardCommandStringPreprocessorTest {
         ))
     }
 
+    @Test(expected = UnmatchedQuoteException::class)
+    fun unmatchedSingleQuote() {
+        StandardCommandStringPreprocessor.process("abc'def")
+    }
+
+    @Test(expected = UnmatchedQuoteException::class)
+    fun unmatchedDoubleQuote() {
+        StandardCommandStringPreprocessor.process("abc\"def")
+    }
+
     private fun testString(input: String, output: CommandString) {
         assertThat(StandardCommandStringPreprocessor.process(input), `is`(equalTo(output)))
     }
