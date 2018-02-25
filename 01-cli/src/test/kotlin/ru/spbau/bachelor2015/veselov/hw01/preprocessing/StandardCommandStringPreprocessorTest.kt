@@ -57,8 +57,8 @@ class StandardCommandStringPreprocessorTest {
     }
 
     @Test(expected = UnmatchedQuoteException::class)
-    fun unmatchedDoubleQuote() {
-        StandardCommandStringPreprocessor.process("abc\"def")
+    fun unmatchedDoubkeQuote() {
+        StandardCommandStringPreprocessor.process("abc'def")
     }
 
     private fun testString(input: String, output: CommandString) {

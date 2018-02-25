@@ -17,9 +17,9 @@ object StandardCommandStringPreprocessor : CommandStringPreprocessor {
             when (escaping) {
                 ESCAPING.NON -> {
                     when (it) {
-                        '\'' -> escaping = ESCAPING.STRONG
+                        CommandCharacter.strongQuote.character -> escaping = ESCAPING.STRONG
 
-                        '"' -> escaping = ESCAPING.WEAK
+                        CommandCharacter.weakQuote.character -> escaping = ESCAPING.WEAK
 
                         else -> {}
                     }
@@ -29,7 +29,7 @@ object StandardCommandStringPreprocessor : CommandStringPreprocessor {
 
                 ESCAPING.STRONG -> {
                     when (it) {
-                        '\'' -> {
+                        CommandCharacter.strongQuote.character -> {
                             escaping = ESCAPING.NON
                             false
                         }
@@ -40,12 +40,12 @@ object StandardCommandStringPreprocessor : CommandStringPreprocessor {
 
                 ESCAPING.WEAK -> {
                     when (it) {
-                        '"' -> {
+                        CommandCharacter.weakQuote.character -> {
                             escaping = ESCAPING.NON
                             false
                         }
 
-                        '$' -> false
+                        CommandCharacter.symbolExpansion.character -> false
 
                         else -> true
                     }
