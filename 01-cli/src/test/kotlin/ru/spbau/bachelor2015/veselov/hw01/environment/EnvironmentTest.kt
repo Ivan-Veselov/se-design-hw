@@ -4,6 +4,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Assert.*
 import org.junit.Test
+import ru.spbau.bachelor2015.veselov.hw01.ConcatenationUtility
 import ru.spbau.bachelor2015.veselov.hw01.ExecutionResult
 
 class EnvironmentTest {
@@ -28,19 +29,16 @@ class EnvironmentTest {
 
         val args = listOf("a", "b")
         val input = "c"
-        val concatenation = args.joinToString() + input
-
-        val triesToExit = true
+        val concatenation = args.joinToString("") + input
 
         val env = Environment()
-        env.registerUtility(utilityName, object : Utility {
-            override fun execute(args: List<String>, input: String): ExecutionResult {
-                return ExecutionResult(args.joinToString() + input, triesToExit)
-            }
-        })
+        env.registerUtility(utilityName, ConcatenationUtility)
 
         val executionResult = env.executeUtility(utilityName, args, input)
-        assertThat(executionResult, `is`(equalTo(ExecutionResult(concatenation, triesToExit))))
+        assertThat(
+            executionResult,
+            `is`(equalTo(ExecutionResult(concatenation, ConcatenationUtility.triesToExit)))
+        )
     }
 
     @Test
