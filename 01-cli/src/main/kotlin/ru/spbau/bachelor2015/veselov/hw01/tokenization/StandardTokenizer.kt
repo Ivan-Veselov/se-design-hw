@@ -19,21 +19,21 @@ object StandardTokenizer : Tokenizer {
         return commandString.split {
             !it.isEscaped && Character.isWhitespace(it.character)
         }.filter {
-                    it.isNotEmpty()
-                }.map {
-                    concatenationTokenFrom(it)
-                }
+            it.isNotEmpty()
+        }.map {
+            concatenationTokenFrom(it)
+        }
     }
 
     private fun concatenationTokenFrom(commandString: CommandString): Token {
         assert(commandString.isNotEmpty())
 
         fun processToken(
-                stopCharacter: (CommandCharacter) -> Boolean,
-                processToken: (CommandString) -> Token,
-                skipPrefix: Boolean,
-                skipStopCharacter: Boolean,
-                missingStopIsError: Boolean
+            stopCharacter: (CommandCharacter) -> Boolean,
+            processToken: (CommandString) -> Token,
+            skipPrefix: Boolean,
+            skipStopCharacter: Boolean,
+            missingStopIsError: Boolean
         ): Token {
             val indexOfNext = commandString.drop(1)
                     .indexOfFirst(stopCharacter) + 1
@@ -55,60 +55,60 @@ object StandardTokenizer : Tokenizer {
             }
 
             return ConcatenationToken(
-                    processToken(commandString.subList(if (skipPrefix) 1 else 0, indexOfNext)),
-                    concatenationTokenFrom(
-                            commandString.drop(numberOfCharactersToDrop)
-                    )
+                processToken(commandString.subList(if (skipPrefix) 1 else 0, indexOfNext)),
+                concatenationTokenFrom(
+                        commandString.drop(numberOfCharactersToDrop)
+                )
             )
         }
 
         return when (commandString.first()) {
             CommandCharacter.weakQuote -> {
                 processToken(
-                        { it == CommandCharacter.weakQuote },
-                        { tokenFromWeaklyQuotedString(it) },
-                        true,
-                        true,
-                        true
+                    { it == CommandCharacter.weakQuote },
+                    { tokenFromWeaklyQuotedString(it) },
+                    true,
+                    true,
+                    true
                 )
             }
 
             CommandCharacter.strongQuote -> {
                 processToken(
-                        { it == CommandCharacter.strongQuote },
-                        { tokenFromStronglyQuotedString(it) },
-                        true,
-                        true,
-                        true
+                    { it == CommandCharacter.strongQuote },
+                    { tokenFromStronglyQuotedString(it) },
+                    true,
+                    true,
+                    true
                 )
             }
 
             CommandCharacter.symbolExpansion -> {
                 processToken(
-                        {
-                            it == CommandCharacter.strongQuote ||
-                                    it == CommandCharacter.weakQuote ||
-                                    it == CommandCharacter.symbolExpansion ||
-                                    Character.isWhitespace(it.character)
-                        },
-                        { tokenFromSymbolExpansion(it) },
-                        true,
-                        false,
-                        false
+                    {
+                        it == CommandCharacter.strongQuote ||
+                                it == CommandCharacter.weakQuote ||
+                                it == CommandCharacter.symbolExpansion ||
+                                Character.isWhitespace(it.character)
+                    },
+                    { tokenFromSymbolExpansion(it) },
+                    true,
+                    false,
+                    false
                 )
             }
 
             else -> {
                 processToken(
-                        {
-                            it == CommandCharacter.strongQuote ||
-                                    it == CommandCharacter.weakQuote ||
-                                    it == CommandCharacter.symbolExpansion
-                        },
-                        { tokenFromSimpleString(it) },
-                        false,
-                        false,
-                        false
+                    {
+                        it == CommandCharacter.strongQuote ||
+                                it == CommandCharacter.weakQuote ||
+                                it == CommandCharacter.symbolExpansion
+                    },
+                    { tokenFromSimpleString(it) },
+                    false,
+                    false,
+                    false
                 )
             }
         }

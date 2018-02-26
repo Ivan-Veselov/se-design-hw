@@ -10,6 +10,10 @@ data class CommandCharacter(val character: Char, val isEscaped: Boolean) {
         val strongQuote = CommandCharacter('\'', false)
 
         val symbolExpansion = CommandCharacter('$', false)
+
+        val assignment = CommandCharacter('=', false)
+
+        val pipe = CommandCharacter('|', false)
     }
 }
 
