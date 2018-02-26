@@ -31,7 +31,7 @@ object WcUtility : Utility {
 
         return Statistics(
             string.count { it == '\n' },
-            string.split("\\s+".toRegex()).size,
+            string.split("\\s+".toRegex()).filter { it.isNotEmpty() } .size,
             bytes.size
         )
     }

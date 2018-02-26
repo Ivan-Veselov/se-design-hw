@@ -32,12 +32,22 @@ class WcUtilityTest {
 
     @Test
     fun inputStream() {
-        val executionResult =
-                WcUtility.execute(listOf(), "a  b")
+        testInputStream("a  b", "0 2 4")
+    }
+
+    @Test
+    fun newLineEnd() {
+        testInputStream("abc\n", "1 1 4")
+    }
+
+    private fun testInputStream(input: String, output: String) {
+        val executionResult = WcUtility.execute(listOf(), input)
 
         MatcherAssert.assertThat(
             executionResult,
-            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult("0 2 4\n", false)))
+            CoreMatchers.`is`(
+                CoreMatchers.equalTo(ExecutionResult("$output\n", false)
+            ))
         )
     }
 }
