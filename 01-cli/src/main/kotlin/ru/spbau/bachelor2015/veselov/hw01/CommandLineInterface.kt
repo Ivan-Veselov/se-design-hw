@@ -13,7 +13,7 @@ class CommandLineInterface(private val system: ExecutionSystem) {
 
             try {
                 val executionResult = system.execute(input)
-                println(executionResult.output)
+                print(executionResult.output)
 
                 if (executionResult.triesToExit) {
                     break

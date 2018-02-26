@@ -17,7 +17,7 @@ class EchoUtilityTest {
         assertThat(
             executionResult,
             CoreMatchers.`is`(CoreMatchers.equalTo(
-                ExecutionResult(arg1 + " " + arg2, false)
+                ExecutionResult(arg1 + " " + arg2 + "\n", false)
             ))
         )
     }

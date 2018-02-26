@@ -26,7 +26,7 @@ class WcUtilityTest {
 
         MatcherAssert.assertThat(
             executionResult,
-            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult("1 2 9", false)))
+            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult("1 2 9\n", false)))
         )
     }
 
@@ -37,7 +37,7 @@ class WcUtilityTest {
 
         MatcherAssert.assertThat(
             executionResult,
-            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult("0 2 4", false)))
+            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult("0 2 4\n", false)))
         )
     }
 }

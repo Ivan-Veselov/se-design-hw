@@ -14,7 +14,7 @@ import java.nio.file.Paths
 object CatUtility : Utility {
     override fun execute(args: List<String>, input: String): ExecutionResult {
         return ExecutionResult(
-            args.joinToString("") { processFile(Paths.get(it)) },
+            args.joinToString("", "", "\n") { processFile(Paths.get(it)) },
             false
         )
     }

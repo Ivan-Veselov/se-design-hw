@@ -31,7 +31,7 @@ class CatUtilityTest {
 
         assertThat(
             executionResult,
-            `is`(equalTo(ExecutionResult(content1 + content2, false)))
+            `is`(equalTo(ExecutionResult(content1 + content2 + "\n", false)))
         )
     }
 }

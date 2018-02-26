@@ -17,7 +17,7 @@ object WcUtility : Utility {
             countStatistics(input.toByteArray(Charset.defaultCharset())).toString()
         } else {
             args.joinToString("\n") { countFileStatistics(Paths.get(it)).toString() }
-        }
+        } + "\n"
 
         return ExecutionResult(output, false)
     }
