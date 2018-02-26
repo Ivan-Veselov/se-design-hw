@@ -16,7 +16,7 @@ class CatUtilityTest {
     val folder = TemporaryFolder()
 
     @Test
-    fun testUsingTempFolder() {
+    fun twoFilesTest() {
         val file1 = folder.newFile()
         val file2 = folder.newFile()
 
