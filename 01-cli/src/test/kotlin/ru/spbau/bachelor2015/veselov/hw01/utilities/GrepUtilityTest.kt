@@ -3,7 +3,6 @@ package ru.spbau.bachelor2015.veselov.hw01.utilities
 import org.apache.commons.io.FileUtils
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -18,30 +17,39 @@ class GrepUtilityTest {
 
     @Test
     fun oneFile() {
-        testFiles("bc", listOf(), "abcd", expected = "abcd\n")
+        testFile("bc", listOf(), "abcd", "abcd\n")
     }
 
     @Test
     fun twoFiles() {
-        testFiles("bc", listOf(), "abcd", "bcbc", expected = "abcd\nbcbc\n")
+        val files = prepareFiles("abcd", "bcbc")
+        val expected = "${files[0].absolutePath}:abcd\n${files[1].absolutePath}:bcbc\n"
+
+        MatcherAssert.assertThat(
+            GrepUtility.execute(
+                listOf("bc") + files.map{ it.absolutePath },
+                ""
+            ),
+            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult(expected, false)))
+        )
     }
 
     @Test
     fun severalLinesInOneFile() {
-        testFiles("bc", listOf(), "abcd\nbcde\ncdef", expected = "abcd\nbcde\n")
+        testFile("bc", listOf(), "abcd\nbcde\ncdef", "abcd\nbcde\n")
     }
 
-    private fun testFiles(
+    private fun testFile(
         pattern: String,
         options: List<String>,
-        vararg contents: String,
+        content: String,
         expected: String
     ) {
-        val files = prepareFiles(*contents)
+        val file = prepareFiles(content).single()
 
         MatcherAssert.assertThat(
             GrepUtility.execute(
-                listOf(pattern) + options + files.map{ it.absolutePath },
+                listOf(pattern) + options + file.absolutePath,
                 ""
             ),
             CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult(expected, false)))

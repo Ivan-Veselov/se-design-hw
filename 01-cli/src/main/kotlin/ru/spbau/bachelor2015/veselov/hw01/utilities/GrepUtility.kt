@@ -18,9 +18,15 @@ object GrepUtility : Utility {
                 val regex = Regex(pattern)
 
                 buildString {
-                    for (file in files) {
-                        Files.lines(file).use {
-                            append(processStream(regex, it))
+                    if (files.size == 1) {
+                        Files.lines(Paths.get(files.single())).use {
+                            append(processStream(regex, it, ""))
+                        }
+                    } else {
+                        for (file in files) {
+                            Files.lines(Paths.get(file)).use {
+                                append(processStream(regex, it, file + ":"))
+                            }
                         }
                     }
                 }
@@ -29,11 +35,11 @@ object GrepUtility : Utility {
         )
     }
 
-    private fun processStream(regex: Regex, stream: Stream<String>): String {
+    private fun processStream(regex: Regex, stream: Stream<String>, prefix: String): String {
         return buildString {
             stream.forEach {
                 if (regex.containsMatchIn(it)) {
-                    appendln(it)
+                    append(prefix).appendln(it)
                 }
             }
         }
@@ -48,8 +54,6 @@ object GrepUtility : Utility {
 
         val pattern by parser.positional("PATTERN", help = "")
 
-        val files by parser.positionalList("FILES", help = "", sizeRange = 1..Int.MAX_VALUE) {
-            Paths.get(this)
-        }
+        val files by parser.positionalList("FILES", help = "", sizeRange = 1..Int.MAX_VALUE)
     }
 }
