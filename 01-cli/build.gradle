@@ -2,11 +2,13 @@ group 'ru.spbau.bachelor2015.veselov.hw01'
 version '1.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.20'
+    ext.kotlin_version = '1.2.21'
 
     repositories {
         mavenCentral()
+        jcenter()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -23,7 +25,9 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile "com.xenomachina:kotlin-argparser:$kotlin_argparser_version"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
