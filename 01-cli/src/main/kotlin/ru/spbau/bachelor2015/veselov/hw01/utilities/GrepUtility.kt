@@ -15,7 +15,11 @@ object GrepUtility : Utility {
 
         return ExecutionResult(
             parsedArgs.run {
-                val regex = Regex(pattern)
+                val regex = if (ignoreCase) {
+                    Regex(pattern, RegexOption.IGNORE_CASE)
+                } else {
+                    Regex(pattern)
+                }
 
                 buildString {
                     when (files.size) {

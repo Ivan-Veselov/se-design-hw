@@ -54,6 +54,11 @@ class GrepUtilityTest {
         testStdInput("bc", listOf("-A1"), "abcd\nzzz\nxxx", "abcd\nzzz\n")
     }
 
+    @Test
+    fun ignoreCaseOption() {
+        testStdInput("bc", listOf("-i"), "aBcD\n", "aBcD\n")
+    }
+
     private fun testFile(
         pattern: String,
         options: List<String>,
