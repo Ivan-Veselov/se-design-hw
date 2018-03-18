@@ -59,6 +59,11 @@ class GrepUtilityTest {
         testStdInput("bc", listOf("-i"), "aBcD\n", "aBcD\n")
     }
 
+    @Test
+    fun wordsMatchingOption() {
+        testStdInput("cc", listOf("-w"), "bccb\ncb cc\n", "cb cc\n")
+    }
+
     private fun testFile(
         pattern: String,
         options: List<String>,

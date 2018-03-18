@@ -27,16 +27,29 @@ object GrepUtility : Utility {
                             regex,
                             input.split("\\R".toRegex()).stream(),
                             "",
-                            linesAfterMatch
+                            linesAfterMatch,
+                            wordsMatching
                         ))
 
                         1 -> Files.lines(Paths.get(files.single())).use {
-                            append(processStream(regex, it, "", linesAfterMatch))
+                            append(processStream(
+                                regex,
+                                it,
+                                "",
+                                linesAfterMatch,
+                                wordsMatching
+                            ))
                         }
 
                         else -> for (file in files) {
                             Files.lines(Paths.get(file)).use {
-                                append(processStream(regex, it, file + ":", linesAfterMatch))
+                                append(processStream(
+                                    regex,
+                                    it,
+                                    file + ":",
+                                    linesAfterMatch,
+                                    wordsMatching
+                                ))
                             }
                         }
                     }
@@ -49,12 +62,21 @@ object GrepUtility : Utility {
     private fun processStream(
         regex: Regex,
         stream: Stream<String>,
-        prefix: String, linesAfterMatch: Int
+        prefix: String, linesAfterMatch: Int,
+        wordsMatching: Boolean
     ): String {
+        fun matches(line: String): Boolean {
+            return if (wordsMatching) {
+                line.split("\\s+".toRegex()).any { regex.matches(it) }
+            } else {
+                regex.containsMatchIn(line)
+            }
+        }
+
         return buildString {
             var counter = 0
             stream.forEach {
-                if (regex.containsMatchIn(it)) {
+                if (matches(it)) {
                     append(prefix).appendln(it)
                     counter = linesAfterMatch
                 } else if (counter > 0) {
