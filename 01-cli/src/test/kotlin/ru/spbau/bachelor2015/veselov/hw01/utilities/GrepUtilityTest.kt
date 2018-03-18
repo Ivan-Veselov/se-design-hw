@@ -39,6 +39,21 @@ class GrepUtilityTest {
         testFile("bc", listOf(), "abcd\nbcde\ncdef", "abcd\nbcde\n")
     }
 
+    @Test
+    fun stdInput() {
+        testStdInput("bc", listOf(), "abcd", "abcd\n")
+    }
+
+    @Test
+    fun afterOption() {
+        testStdInput("bc", listOf("-A", "1"), "abcd\nzzz\nxxx", "abcd\nzzz\n")
+    }
+
+    @Test
+    fun afterOptionInOneWord() {
+        testStdInput("bc", listOf("-A1"), "abcd\nzzz\nxxx", "abcd\nzzz\n")
+    }
+
     private fun testFile(
         pattern: String,
         options: List<String>,
@@ -51,6 +66,21 @@ class GrepUtilityTest {
             GrepUtility.execute(
                 listOf(pattern) + options + file.absolutePath,
                 ""
+            ),
+            CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult(expected, false)))
+        )
+    }
+
+    private fun testStdInput(
+        pattern: String,
+        options: List<String>,
+        input: String,
+        expected: String
+    ) {
+        MatcherAssert.assertThat(
+            GrepUtility.execute(
+                listOf(pattern) + options,
+                input
             ),
             CoreMatchers.`is`(CoreMatchers.equalTo(ExecutionResult(expected, false)))
         )

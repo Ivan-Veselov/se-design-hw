@@ -18,14 +18,21 @@ object GrepUtility : Utility {
                 val regex = Regex(pattern)
 
                 buildString {
-                    if (files.size == 1) {
-                        Files.lines(Paths.get(files.single())).use {
-                            append(processStream(regex, it, ""))
+                    when (files.size) {
+                        0 -> append(processStream(
+                            regex,
+                            input.split("\\s+".toRegex()).stream(),
+                            "",
+                            linesAfterMatch
+                        ))
+
+                        1 -> Files.lines(Paths.get(files.single())).use {
+                            append(processStream(regex, it, "", linesAfterMatch))
                         }
-                    } else {
-                        for (file in files) {
+
+                        else -> for (file in files) {
                             Files.lines(Paths.get(file)).use {
-                                append(processStream(regex, it, file + ":"))
+                                append(processStream(regex, it, file + ":", linesAfterMatch))
                             }
                         }
                     }
@@ -35,11 +42,20 @@ object GrepUtility : Utility {
         )
     }
 
-    private fun processStream(regex: Regex, stream: Stream<String>, prefix: String): String {
+    private fun processStream(
+        regex: Regex,
+        stream: Stream<String>,
+        prefix: String, linesAfterMatch: Int
+    ): String {
         return buildString {
+            var counter = 0
             stream.forEach {
                 if (regex.containsMatchIn(it)) {
                     append(prefix).appendln(it)
+                    counter = linesAfterMatch
+                } else if (counter > 0) {
+                    append(prefix).appendln(it)
+                    counter--
                 }
             }
         }
@@ -50,10 +66,12 @@ object GrepUtility : Utility {
 
         val wordsMatching by parser.flagging("-w", help = "")
 
-        val linesAfterMatch by parser.storing("-A", help = "").default(0)
+        val linesAfterMatch by parser.storing("-A", help = "") {
+            Integer.parseInt(this)
+        }.default(0)
 
         val pattern by parser.positional("PATTERN", help = "")
 
-        val files by parser.positionalList("FILES", help = "", sizeRange = 1..Int.MAX_VALUE)
+        val files by parser.positionalList("FILES", help = "", sizeRange = 0..Int.MAX_VALUE)
     }
 }
