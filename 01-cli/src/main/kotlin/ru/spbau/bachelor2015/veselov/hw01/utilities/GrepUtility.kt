@@ -25,7 +25,7 @@ object GrepUtility : Utility {
                     when (files.size) {
                         0 -> append(processStream(
                             regex,
-                            input.split("\\s+".toRegex()).stream(),
+                            input.split("\\R".toRegex()).stream(),
                             "",
                             linesAfterMatch
                         ))

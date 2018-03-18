@@ -41,7 +41,7 @@ class GrepUtilityTest {
 
     @Test
     fun stdInput() {
-        testStdInput("bc", listOf(), "abcd", "abcd\n")
+        testStdInput("bc", listOf(), "a bcd\nabc d\n", "a bcd\nabc d\n")
     }
 
     @Test
