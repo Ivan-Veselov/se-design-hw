@@ -10,6 +10,7 @@ fun main(args: Array<String>) {
     environment.registerUtility("echo", EchoUtility)
     environment.registerUtility("wc", WcUtility)
     environment.registerUtility("pwd", PwdUtility)
+    environment.registerUtility("grep", GrepUtility)
     environment.registerUtility("exit", ExitUtility)
 
     val cli =
