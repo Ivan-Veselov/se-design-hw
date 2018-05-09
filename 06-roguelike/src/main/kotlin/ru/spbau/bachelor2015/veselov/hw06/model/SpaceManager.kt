@@ -14,14 +14,15 @@ class SpaceManager(
 
     private val objectsInCell = mutableMapOf<Vector2D, MutableSet<SpatialObject>>()
 
-    abstract inner class SpatialObject(
+    abstract class SpatialObject(
+        private val spaceManager: SpaceManager,
         priority: GameObjectPriority
-    ): GameObjectsManager.GameObject(gameObjectsManager, priority) {
+    ): GameObjectsManager.GameObject(spaceManager.gameObjectsManager, priority) {
         abstract fun willStepOnTheSameCellWith(other: SpatialObject): Boolean
 
         fun isInAdjacentCell(other: SpatialObject): Boolean {
-            val myCoordinates = objectCoordinates[this]
-            val otherCoordinates = objectCoordinates[other]
+            val myCoordinates = spaceManager.objectCoordinates[this]
+            val otherCoordinates = spaceManager.objectCoordinates[other]
 
             if (myCoordinates == null || otherCoordinates == null) {
                 return false
@@ -31,8 +32,8 @@ class SpaceManager(
         }
 
         fun isOnTheSameCell(other: SpatialObject): Boolean {
-            val myCoordinates = objectCoordinates[this]
-            val otherCoordinates = objectCoordinates[other]
+            val myCoordinates = spaceManager.objectCoordinates[this]
+            val otherCoordinates = spaceManager.objectCoordinates[other]
 
             if (myCoordinates == null || otherCoordinates == null) {
                 return false
@@ -42,8 +43,8 @@ class SpaceManager(
         }
 
         fun canBePutOn(coordinates: Vector2D): Boolean {
-            return staticMap.isPassable(coordinates) &&
-                objectsInCell[coordinates]?.map {
+            return spaceManager.staticMap.isPassable(coordinates) &&
+                spaceManager.objectsInCell[coordinates]?.map {
                     willStepOnTheSameCellWith(it)
                 }?.all { it == true} ?: true
         }
@@ -53,65 +54,70 @@ class SpaceManager(
                 throw InvalidCellToPutOnException()
             }
 
-            val previousCoordinates = objectCoordinates[this]
+            val previousCoordinates = spaceManager.objectCoordinates[this]
             if (previousCoordinates != null) {
-                objectsInCell[previousCoordinates]?.remove(this)
+                spaceManager.objectsInCell[previousCoordinates]?.remove(this)
             }
 
-            objectCoordinates[this] = coordinates
-            objectsInCell.getOrPut(coordinates) { mutableSetOf() }.add(this)
+            spaceManager.objectCoordinates[this] = coordinates
+            spaceManager.objectsInCell.getOrPut(coordinates) { mutableSetOf() }.add(this)
         }
 
         fun canBeTranslatedOn(vector: Vector2D): Boolean {
-            val coordinates = objectCoordinates[this] ?:
+            val coordinates = spaceManager.objectCoordinates[this] ?:
                 throw ObjectWithNoPositionException()
 
             return canBePutOn(coordinates.add(vector))
         }
 
         fun translateOn(vector: Vector2D) {
-            val coordinates = objectCoordinates[this] ?:
+            val coordinates = spaceManager.objectCoordinates[this] ?:
                 throw ObjectWithNoPositionException()
 
             putOn(coordinates.add(vector))
         }
 
         fun objectsOnTheSameCell(): List<SpatialObject> {
-            val coordinates = objectCoordinates[this] ?: throw ObjectWithNoPositionException()
-            return objectsInCell[coordinates]!!.toList()
+            val coordinates = spaceManager.objectCoordinates[this] ?:
+                throw ObjectWithNoPositionException()
+
+            return spaceManager.objectsInCell[coordinates]!!.toList()
         }
 
         fun distanceTo(other: SpatialObject): Int {
-            val myCoordinates = objectCoordinates[this]
-            val otherCoordinates = objectCoordinates[other]
+            val myCoordinates = spaceManager.objectCoordinates[this]
+            val otherCoordinates = spaceManager.objectCoordinates[other]
 
             if (myCoordinates == null || otherCoordinates == null) {
                 throw ObjectWithNoPositionException()
             }
 
-            return staticMap.distanceBetween(myCoordinates, otherCoordinates)
+            return spaceManager.staticMap.distanceBetween(myCoordinates, otherCoordinates)
         }
 
         fun distanceDistributionTo(other: SpatialObject): Map<Direction, Int> {
-            val myCoordinates = objectCoordinates[this]
-            val otherCoordinates = objectCoordinates[other]
+            val myCoordinates = spaceManager.objectCoordinates[this]
+            val otherCoordinates = spaceManager.objectCoordinates[other]
 
             if (myCoordinates == null || otherCoordinates == null) {
                 throw ObjectWithNoPositionException()
             }
 
             return Direction.values().map {
-                Pair(it, staticMap.distanceBetween(myCoordinates.add(it.vector), otherCoordinates))
+                Pair(it, spaceManager.staticMap.distanceBetween(
+                    myCoordinates.add(it.vector),
+                    otherCoordinates
+                ))
             }.toMap()
         }
 
         override fun destroy() {
             super.destroy()
 
-            val coordinates = objectCoordinates[this] ?: return
+            val coordinates = spaceManager.objectCoordinates[this] ?: return
 
-            objectCoordinates.remove(this)
-            objectsInCell[coordinates]?.remove(this)
+            spaceManager.objectCoordinates.remove(this)
+            spaceManager.objectsInCell[coordinates]?.remove(this)
         }
     }
 }

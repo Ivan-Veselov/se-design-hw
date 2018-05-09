@@ -4,7 +4,7 @@ enum class GameObjectPriority {
     LEAST, MONSTER, FIRE_WALL, STATIC_OBJECT;
 }
 
-abstract class GameObjectsManager {
+class GameObjectsManager {
     private val gameObjects = sortedSetOf<GameObject>(Comparator { o1, o2 ->
         if (o1.priority < o2.priority) {
             return@Comparator 1
