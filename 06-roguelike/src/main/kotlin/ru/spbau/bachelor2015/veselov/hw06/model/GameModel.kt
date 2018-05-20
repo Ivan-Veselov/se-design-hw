@@ -10,6 +10,10 @@ class GameModel {
 
     private val playerCharacter = PlayerCharacter(spaceManager)
 
+    init {
+        playerCharacter.putOn(spaceManager.staticMap.uniformlyDistributedCells(1).first())
+    }
+
     fun getPlayer(): PlayerCharacterView {
         return playerCharacter
     }

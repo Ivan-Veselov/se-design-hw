@@ -1,6 +1,6 @@
 package ru.spbau.bachelor2015.veselov.hw06.model
 
-import java.util.*
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectView
 
 class InvalidCellToPutOnException: Exception()
 
@@ -8,7 +8,7 @@ class ObjectWithNoPositionException: Exception()
 
 class SpaceManager(
     private val gameObjectsManager: GameObjectsManager,
-    private val staticMap: StaticMap
+    val staticMap: StaticMap
 ) {
     private val objectCoordinates = mutableMapOf<SpatialObject, Vector2D>()
 
@@ -17,8 +17,22 @@ class SpaceManager(
     abstract class SpatialObject(
         private val spaceManager: SpaceManager,
         priority: GameObjectPriority
-    ): GameObjectsManager.GameObject(spaceManager.gameObjectsManager, priority) {
+    ): GameObjectsManager.GameObject(spaceManager.gameObjectsManager, priority), SpatialObjectView {
         abstract fun willStepOnTheSameCellWith(other: SpatialObject): Boolean
+
+        override fun isPassableRelatively(vector: Vector2D): Boolean {
+            val coordinates = spaceManager.objectCoordinates[this] ?:
+                throw ObjectWithNoPositionException()
+
+            return spaceManager.staticMap.isPassable(coordinates.add(vector))
+        }
+
+        override fun getObjectsRelatively(vector: Vector2D): List<SpatialObjectView> {
+            val coordinates = spaceManager.objectCoordinates[this] ?:
+                throw ObjectWithNoPositionException()
+
+            return spaceManager.objectsInCell[coordinates.add(vector)]?.toList() ?: emptyList()
+        }
 
         fun isInAdjacentCell(other: SpatialObject): Boolean {
             val myCoordinates = spaceManager.objectCoordinates[this]

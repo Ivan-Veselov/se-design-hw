@@ -2,6 +2,7 @@ package ru.spbau.bachelor2015.veselov.hw06.model.objects
 
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.BattleUnitView
 import java.util.*
 
 enum class Attribute {
@@ -12,10 +13,10 @@ abstract class BattleUnit(
     spaceManager: SpaceManager,
     priority: GameObjectPriority,
     attributes: Map<Attribute, Int>
-) : SpaceManager.SpatialObject(spaceManager, priority) {
-    private var health: Int = getBaseAttribute(Attribute.HEALTH_AMOUNT)
-
+) : SpaceManager.SpatialObject(spaceManager, priority), BattleUnitView {
     private val attributes = attributes.toMutableMap()
+
+    private var health: Int = getBaseAttribute(Attribute.HEALTH_AMOUNT)
 
     fun getBaseAttribute(attribute: Attribute): Int {
         return attributes[attribute] ?: 0
