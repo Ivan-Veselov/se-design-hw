@@ -6,6 +6,9 @@ message Message {
     string body = 1;
 }
 
+message None {
+}
+
 service Messenger {
-    rpc SendMessage(Message) returns (Message) {}
+    rpc SendMessage(Message) returns (None) {}
 }

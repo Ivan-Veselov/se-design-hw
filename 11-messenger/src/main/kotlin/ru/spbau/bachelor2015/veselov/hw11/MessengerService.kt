@@ -5,14 +5,11 @@ import io.grpc.stub.StreamObserver
 class MessengerService : MessengerGrpc.MessengerImplBase() {
     override fun sendMessage(
         request: Protocol.Message,
-        responseObserver: StreamObserver<Protocol.Message>
+        responseObserver: StreamObserver<Protocol.None>
     ) {
-        responseObserver.onNext(
-            Protocol.Message.newBuilder()
-                            .setBody(request.body.reversed())
-                            .build()
-        )
+        println(request.body)
 
+        responseObserver.onNext(Protocol.None.newBuilder().build())
         responseObserver.onCompleted()
     }
 }

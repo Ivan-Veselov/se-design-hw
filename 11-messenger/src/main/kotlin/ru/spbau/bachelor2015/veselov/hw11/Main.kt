@@ -31,16 +31,17 @@ fun main(args: Array<String>) {
 
     val blockingStub = MessengerGrpc.newBlockingStub(channel)
 
-    val message = Protocol.Message.newBuilder()
-                                  .setBody("Hello, World!")
-                                  .build()
+    while (true) {
+        val body = readLine()
 
-    val response = try {
-        blockingStub.sendMessage(message)
-    } catch (e: StatusRuntimeException) {
-        println("RPC failed: ${e.status}")
-        return
+        val message = Protocol.Message.newBuilder()
+                                      .setBody(body)
+                                      .build()
+
+        try {
+            blockingStub.sendMessage(message)
+        } catch (e: StatusRuntimeException) {
+            println("Failed to deliver previous message")
+        }
     }
-
-    println(response.body)
 }
