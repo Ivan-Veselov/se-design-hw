@@ -2,6 +2,7 @@ package ru.spbau.bachelor2015.veselov.hw06.model.objects
 
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
+import ru.spbau.bachelor2015.veselov.hw06.model.SpatialObjectVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 
 class PlayerCharacter(
@@ -17,7 +18,19 @@ class PlayerCharacter(
     )
 ), PlayerCharacterView {
     override fun willStepOnTheSameCellWith(other: SpaceManager.SpatialObject): Boolean {
-        return false // TODO
+        return other.accept(object : SpatialObjectVisitor<Boolean> {
+            override fun visit(player: PlayerCharacter): Boolean {
+                return true
+            }
+
+            override fun visit(player: Exit): Boolean {
+                return true
+            }
+        })
+    }
+
+    override fun <R> accept(visitor: SpatialObjectVisitor<R>): R {
+        return visitor.visit(this)
     }
 
     override fun getActualAttribute(attribute: Attribute): Int {

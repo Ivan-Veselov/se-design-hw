@@ -1,6 +1,7 @@
 package ru.spbau.bachelor2015.veselov.hw06.model
 
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectView
+import ru.spbau.bachelor2015.veselov.hw06.model.map.StaticMap
 
 class InvalidCellToPutOnException: Exception()
 
@@ -19,6 +20,8 @@ class SpaceManager(
         priority: GameObjectPriority
     ): GameObjectsManager.GameObject(spaceManager.gameObjectsManager, priority), SpatialObjectView {
         abstract fun willStepOnTheSameCellWith(other: SpatialObject): Boolean
+
+        abstract fun <R> accept(visitor: SpatialObjectVisitor<R>): R
 
         override fun isPassableRelatively(vector: Vector2D): Boolean {
             val coordinates = spaceManager.objectCoordinates[this] ?:
@@ -60,7 +63,7 @@ class SpaceManager(
             return spaceManager.staticMap.isPassable(coordinates) &&
                 spaceManager.objectsInCell[coordinates]?.map {
                     willStepOnTheSameCellWith(it)
-                }?.all { it == true} ?: true
+                }?.all { it == true } ?: true
         }
 
         fun putOn(coordinates: Vector2D) {

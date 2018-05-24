@@ -1,4 +1,6 @@
-package ru.spbau.bachelor2015.veselov.hw06.model
+package ru.spbau.bachelor2015.veselov.hw06.model.map
+
+import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
 
 interface StaticMap {
     fun isPassable(coordinates: Vector2D): Boolean
