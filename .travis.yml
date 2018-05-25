@@ -5,6 +5,7 @@ jdk:
 
 env:
   - PROJECT_DIR=01-cli
+  - PROJECT_DIR=11-messenger
 
 before_install: cd $PROJECT_DIR
 
