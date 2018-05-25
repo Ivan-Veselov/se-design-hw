@@ -6,6 +6,12 @@ import io.grpc.ServerBuilder
 import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
 import java.util.concurrent.TimeUnit
+import java.util.logging.FileHandler
+import java.util.logging.Level
+import java.util.logging.Logger
+import java.util.logging.SimpleFormatter
+
+
 
 /**
  * Messenger represents a peer-to-peer connection with another user.
@@ -17,6 +23,17 @@ class Messenger(
     peerPort: Int,
     messageHandler: (Protocol.Message) -> Unit
 ) {
+    private val logger = Logger.getLogger(Messenger::class.java.name)
+
+    init {
+        logger.useParentHandlers = false
+        logger.level = Level.FINEST
+
+        val handler = FileHandler("log")
+        handler.formatter = SimpleFormatter()
+        logger.addHandler(handler)
+    }
+
     private val blockingStub: MessengerGrpc.MessengerBlockingStub
 
     private val server =
@@ -32,11 +49,14 @@ class Messenger(
             }
         })
 
+        logger.info("Creating channel")
         val channel = ManagedChannelBuilder.forAddress(peerAddress, peerPort)
                                            .usePlaintext()
                                            .build()
 
         blockingStub = MessengerGrpc.newBlockingStub(channel)
+
+        logger.info("Messenger is initialized")
     }
 
     /**
@@ -61,9 +81,12 @@ class Messenger(
         try {
             blockingStub.sendMessage(message)
         } catch (e: StatusRuntimeException) {
+            logger.warning(e.toString())
+            logger.exiting(Messenger::class.java.name, "sendMessage", false)
             return false
         }
 
+        logger.exiting(Messenger::class.java.name, "sendMessage", true)
         return true
     }
 
@@ -77,14 +100,20 @@ class Messenger(
     private class MessengerService(
         private val messageHandler: (Protocol.Message) -> Unit
     ) : MessengerGrpc.MessengerImplBase() {
+        private val logger = Logger.getLogger(Messenger::class.java.name)
+
         override fun sendMessage(
             request: Protocol.Message,
             responseObserver: StreamObserver<Protocol.None>
         ) {
+            logger.entering(MessengerService::class.java.name, "sendMessage")
+
             messageHandler(request)
 
             responseObserver.onNext(Protocol.None.newBuilder().build())
             responseObserver.onCompleted()
+
+            logger.exiting(MessengerService::class.java.name, "sendMessage")
         }
     }
 }
