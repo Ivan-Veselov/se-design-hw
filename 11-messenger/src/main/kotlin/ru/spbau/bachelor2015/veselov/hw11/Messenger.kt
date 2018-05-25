@@ -16,12 +16,13 @@ class Messenger(
 ) {
     private val blockingStub: MessengerGrpc.MessengerBlockingStub
 
-    init {
-        val server = ServerBuilder.forPort(port)
-                                  .addService(MessengerService(messageHandler))
-                                  .build()
-                                  .start()
+    private val server =
+        ServerBuilder.forPort(port)
+                     .addService(MessengerService(messageHandler))
+                     .build()
+                     .start()
 
+    init {
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run() {
                 server.shutdown()
@@ -56,6 +57,10 @@ class Messenger(
         }
 
         return true
+    }
+
+    fun shutdown() {
+        server.shutdown()
     }
 
     private class MessengerService(
