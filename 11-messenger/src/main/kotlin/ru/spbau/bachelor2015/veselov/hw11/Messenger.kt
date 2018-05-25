@@ -7,6 +7,9 @@ import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
 import java.util.concurrent.TimeUnit
 
+/**
+ * Messenger represents a peer-to-peer connection with another user.
+ */
 class Messenger(
     private val userName: String,
     port: Int,
@@ -36,6 +39,11 @@ class Messenger(
         blockingStub = MessengerGrpc.newBlockingStub(channel)
     }
 
+    /**
+     * Sends message.
+     *
+     * @param body text body of a message.
+     */
     fun sendMessage(body: String): Boolean {
         val message = Protocol.Message.newBuilder()
                                       .setUserName(userName)
@@ -59,6 +67,9 @@ class Messenger(
         return true
     }
 
+    /**
+     * Closes this connection.
+     */
     fun shutdown() {
         server.shutdown()
     }
