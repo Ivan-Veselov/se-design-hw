@@ -2,8 +2,12 @@ syntax = "proto3";
 
 option java_package = "ru.spbau.bachelor2015.veselov.hw11";
 
+import "google/protobuf/timestamp.proto";
+
 message Message {
-    string body = 1;
+    string userName = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    string body = 3;
 }
 
 message None {

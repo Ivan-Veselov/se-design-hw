@@ -1,11 +1,14 @@
 package ru.spbau.bachelor2015.veselov.hw11
 
+import com.google.protobuf.Timestamp
 import io.grpc.ManagedChannelBuilder
 import io.grpc.ServerBuilder
 import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
+import java.util.concurrent.TimeUnit
 
 class Messenger(
+    private val userName: String,
     port: Int,
     peerAddress: String,
     peerPort: Int,
@@ -34,6 +37,15 @@ class Messenger(
 
     fun sendMessage(body: String): Boolean {
         val message = Protocol.Message.newBuilder()
+                                      .setUserName(userName)
+                                      .setTimestamp(
+                                          Timestamp.newBuilder().setSeconds(
+                                              TimeUnit.MILLISECONDS.convert(
+                                                  System.currentTimeMillis(),
+                                                  TimeUnit.SECONDS
+                                              )
+                                          ).build()
+                                      )
                                       .setBody(body)
                                       .build()
 
