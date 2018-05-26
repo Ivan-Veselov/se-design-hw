@@ -5,6 +5,8 @@ import ru.spbau.bachelor2015.veselov.hw06.model.map.RoomsCorridorsMap
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.Exit
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.PlayerCharacter
 
+class GameIsOverException : Exception()
+
 class GameModel {
     private val gameObjectsManager = GameObjectsManager()
 
@@ -15,10 +17,12 @@ class GameModel {
 
     private val playerCharacter = PlayerCharacter(spaceManager)
 
+    private val exit = Exit(spaceManager)
+
     init {
         val cells = spaceManager.staticMap.uniformlyDistributedCells(2)
         playerCharacter.putOn(cells[0])
-        Exit(spaceManager).putOn(cells[1])
+        exit.putOn(cells[1])
     }
 
     fun getPlayer(): PlayerCharacterView {
@@ -26,9 +30,20 @@ class GameModel {
     }
 
     fun makePlayerAction(direction: Direction) {
+        if (isWon()) {
+            throw GameIsOverException()
+        }
+
         if (playerCharacter.canBeTranslatedOn(direction.vector)) {
             playerCharacter.translateOn(direction.vector)
-            return
+
+            if (!isWon()) {
+                gameObjectsManager.makeStep()
+            }
         }
+    }
+
+    fun isWon(): Boolean {
+        return exit.objectsOnTheSameCell().contains(playerCharacter)
     }
 }

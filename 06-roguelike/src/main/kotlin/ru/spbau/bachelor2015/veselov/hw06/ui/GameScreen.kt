@@ -39,6 +39,10 @@ class GameScreen(private val gameModel: GameModel, private val screen: Screen) {
 
                 else -> {}
             }
+
+            if (gameModel.isWon()) {
+                shouldRun = false
+            }
         }
     }
 
