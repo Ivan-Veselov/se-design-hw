@@ -21,14 +21,22 @@ class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScree
     }
 
     override fun handleInput(stroke: KeyStroke): ConsoleScreen.Response {
-        when (stroke.keyType) {
-            KeyType.ArrowLeft -> gameModel.makePlayerAction(Direction.WEST)
+        when (stroke.character) {
+            '1' -> gameModel.makePlayerAction(Direction.SOUTHWEST)
 
-            KeyType.ArrowRight -> gameModel.makePlayerAction(Direction.EAST)
+            '2' -> gameModel.makePlayerAction(Direction.SOUTH)
 
-            KeyType.ArrowUp -> gameModel.makePlayerAction(Direction.NORTH)
+            '3' -> gameModel.makePlayerAction(Direction.SOUTHEAST)
 
-            KeyType.ArrowDown -> gameModel.makePlayerAction(Direction.SOUTH)
+            '4' -> gameModel.makePlayerAction(Direction.WEST)
+
+            '6' -> gameModel.makePlayerAction(Direction.EAST)
+
+            '7' -> gameModel.makePlayerAction(Direction.NORTHWEST)
+
+            '8' -> gameModel.makePlayerAction(Direction.NORTH)
+
+            '9' -> gameModel.makePlayerAction(Direction.NORTHEAST)
 
             else -> {}
         }

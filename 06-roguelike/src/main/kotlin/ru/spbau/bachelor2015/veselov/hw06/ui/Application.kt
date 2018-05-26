@@ -33,7 +33,7 @@ class Application {
 
                 val stroke: KeyStroke = it.readInput()
 
-                if (stroke == KeyType.EOF) {
+                if (stroke.keyType == KeyType.EOF) {
                     screenStack.clear()
                     continue
                 }
