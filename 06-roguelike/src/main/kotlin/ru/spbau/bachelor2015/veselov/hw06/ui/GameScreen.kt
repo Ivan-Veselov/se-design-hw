@@ -6,7 +6,7 @@ import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.model.Direction
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
 
-class GameScreen(private val gameModel: GameModel, private val screen: Screen) {
+class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScreen {
     private val mapWindowArea = MapWindowArea(
         gameModel,
         screen,
@@ -16,34 +16,28 @@ class GameScreen(private val gameModel: GameModel, private val screen: Screen) {
         mapAreaHeight
     )
 
-    fun open() {
-        var shouldRun = true
+    override fun redraw() {
+        mapWindowArea.redraw()
+    }
 
-        while (shouldRun) {
-            screen.doResizeIfNecessary()
-            mapWindowArea.update()
-            screen.refresh()
+    override fun handleInput(stroke: KeyStroke): ConsoleScreen.Response {
+        when (stroke.keyType) {
+            KeyType.ArrowLeft -> gameModel.makePlayerAction(Direction.WEST)
 
-            val stroke: KeyStroke = screen.readInput()
+            KeyType.ArrowRight -> gameModel.makePlayerAction(Direction.EAST)
 
-            when (stroke.keyType) {
-                KeyType.ArrowLeft -> gameModel.makePlayerAction(Direction.WEST)
+            KeyType.ArrowUp -> gameModel.makePlayerAction(Direction.NORTH)
 
-                KeyType.ArrowRight -> gameModel.makePlayerAction(Direction.EAST)
+            KeyType.ArrowDown -> gameModel.makePlayerAction(Direction.SOUTH)
 
-                KeyType.ArrowUp -> gameModel.makePlayerAction(Direction.NORTH)
-
-                KeyType.ArrowDown -> gameModel.makePlayerAction(Direction.SOUTH)
-
-                KeyType.EOF -> shouldRun = false
-
-                else -> {}
-            }
-
-            if (gameModel.isWon()) {
-                shouldRun = false
-            }
+            else -> {}
         }
+
+        if (gameModel.isWon()) {
+            return ConsoleScreen.Response(null, true)
+        }
+
+        return ConsoleScreen.Response(null, false)
     }
 
     private companion object {
