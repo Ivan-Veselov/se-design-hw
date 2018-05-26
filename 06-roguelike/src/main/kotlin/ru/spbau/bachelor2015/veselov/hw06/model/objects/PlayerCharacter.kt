@@ -4,6 +4,7 @@ import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.SpatialObjectVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectViewVisitor
 
 class PlayerCharacter(
     spaceManager: SpaceManager
@@ -27,6 +28,10 @@ class PlayerCharacter(
                 return true
             }
         })
+    }
+
+    override fun <R> accept(visitor: SpatialObjectViewVisitor<R>): R {
+        return visitor.visit(this)
     }
 
     override fun <R> accept(visitor: SpatialObjectVisitor<R>): R {

@@ -1,9 +1,17 @@
 package ru.spbau.bachelor2015.veselov.hw06.ui
 
 import com.googlecode.lanterna.TextCharacter
+import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
 import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.ExitView
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectViewVisitor
+
+enum class Layer {
+    STATIC, UNIT, DYNAMIC
+}
 
 class MapWindowArea(
     private val gameModel: GameModel,
@@ -29,6 +37,28 @@ class MapWindowArea(
         height - 2
     )
 
+    private val layerVisitor = object : SpatialObjectViewVisitor<Layer> {
+        override fun visit(player: PlayerCharacterView): Layer {
+            return Layer.UNIT
+        }
+
+        override fun visit(player: ExitView): Layer {
+            return Layer.STATIC
+        }
+
+    }
+
+    private val textCharacterVisitor = object : SpatialObjectViewVisitor<TextCharacter> {
+        override fun visit(player: PlayerCharacterView): TextCharacter {
+            return TextCharacter('@')
+        }
+
+        override fun visit(player: ExitView): TextCharacter {
+            return TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE)
+        }
+
+    }
+
     fun redraw() {
         val playerCharacter = gameModel.getPlayer()
 
@@ -51,7 +81,8 @@ class MapWindowArea(
                     continue
                 }
 
-                mapWindow.redraw(column, row, TextCharacter('?'))
+                val objectOnTop = objectsInCell.maxBy { it.accept(layerVisitor) }
+                mapWindow.redraw(column, row, objectOnTop!!.accept(textCharacterVisitor))
             }
         }
 

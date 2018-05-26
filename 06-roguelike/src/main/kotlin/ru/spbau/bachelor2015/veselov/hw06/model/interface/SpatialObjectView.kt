@@ -6,4 +6,6 @@ interface SpatialObjectView {
     fun isPassableRelatively(vector: Vector2D): Boolean
 
     fun getObjectsRelatively(vector: Vector2D): List<SpatialObjectView>
+
+    fun <R> accept(visitor: SpatialObjectViewVisitor<R>): R
 }
