@@ -1,21 +1,32 @@
 package ru.spbau.bachelor2015.veselov.hw06.ui
 
 import com.googlecode.lanterna.TerminalSize
+import com.googlecode.lanterna.TextColor
+import com.googlecode.lanterna.graphics.SimpleTheme
 import com.googlecode.lanterna.gui2.*
-import com.googlecode.lanterna.input.KeyStroke
 import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.language.Phrases.INVENTORY
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
+import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.UsableItemView
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemNameResolver
 
 class InventoryScreen(
     private val screen: Screen,
-    private val player: PlayerCharacterView
+    private val gameModel: GameModel
 ) {
     fun open() {
         val textGUI = MultiWindowTextGUI(screen)
-        // todo: textGUI.setTheme()
+        textGUI.theme = SimpleTheme.makeTheme(
+            true,
+                TextColor.ANSI.WHITE,
+                TextColor.ANSI.BLACK,
+                TextColor.ANSI.BLACK,
+                TextColor.ANSI.WHITE,
+                TextColor.ANSI.BLACK,
+                TextColor.ANSI.WHITE,
+                TextColor.ANSI.BLACK
+        )
 
         val window = BasicWindow(INVENTORY)
         window.setHints(listOf(
@@ -36,8 +47,12 @@ class InventoryScreen(
         val contentPanel = Panel(LinearLayout(Direction.VERTICAL))
         val itemsList = ActionListBox(TerminalSize(14, 10))
 
-        player.getInventory().getItems().forEach {
+        gameModel.getPlayer().getInventory().getItems().forEach {
             itemsList.addItem(it.accept(ItemNameResolver)) {
+                if (it is UsableItemView) {
+                    gameModel.useItem(it)
+                    window.close()
+                }
             }
         }
 

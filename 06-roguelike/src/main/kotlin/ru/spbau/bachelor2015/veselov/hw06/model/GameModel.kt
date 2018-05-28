@@ -1,8 +1,10 @@
 package ru.spbau.bachelor2015.veselov.hw06.model
 
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.UsableItemView
 import ru.spbau.bachelor2015.veselov.hw06.model.map.RoomsCorridorsMap
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.*
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemApplier
 
 class GameIsOverException : Exception()
 
@@ -73,6 +75,10 @@ class GameModel {
 
             gameObjectsManager.makeStep()
         }
+    }
+
+    fun useItem(item: UsableItemView) {
+        ItemApplier.useItemOn(playerCharacter, item)
     }
 
     fun isWon(): Boolean {

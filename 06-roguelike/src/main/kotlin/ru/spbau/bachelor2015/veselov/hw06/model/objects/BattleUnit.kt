@@ -1,10 +1,10 @@
 package ru.spbau.bachelor2015.veselov.hw06.model.objects
 
 import ru.spbau.bachelor2015.veselov.hw06.model.BattleUnitVisitor
-import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
+import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.BattleUnitView
-import java.lang.Integer.max
+import java.lang.Integer.min
 import java.util.*
 
 enum class Attribute {
@@ -39,7 +39,7 @@ abstract class BattleUnit(
     }
 
     fun heal(points: Int) {
-        health = max(health + points, getBaseAttribute(Attribute.HEALTH_AMOUNT))
+        health = min(health + points, getBaseAttribute(Attribute.HEALTH_AMOUNT))
     }
 
     fun attack(other: BattleUnit) {

@@ -62,7 +62,7 @@ class GameScreen(private val gameModel: GameModel, private val screen: Screen): 
 
             '9' -> gameModel.makePlayerAction(Direction.NORTHEAST)
 
-            'i' -> InventoryScreen(screen, gameModel.getPlayer()).open()
+            'i' -> InventoryScreen(screen, gameModel).open()
 
             else -> {}
         }
