@@ -5,10 +5,7 @@ import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
 import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.ExitView
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.MonsterAreaCentreView
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectViewVisitor
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.*
 
 enum class Layer {
     INVISIBLE, STATIC, UNIT, DYNAMIC
@@ -39,6 +36,10 @@ class MapWindowArea(
     )
 
     private val layerVisitor = object : SpatialObjectViewVisitor<Layer> {
+        override fun visit(monster: MonsterView): Layer {
+            return Layer.UNIT
+        }
+
         override fun visit(monsterAreaCentre: MonsterAreaCentreView): Layer {
             return Layer.INVISIBLE
         }
@@ -54,6 +55,10 @@ class MapWindowArea(
     }
 
     private val textCharacterVisitor = object : SpatialObjectViewVisitor<TextCharacter> {
+        override fun visit(monster: MonsterView): TextCharacter {
+            return TextCharacter('q')
+        }
+
         override fun visit(monsterAreaCentre: MonsterAreaCentreView): TextCharacter {
             return TextCharacter('?')
         }

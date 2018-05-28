@@ -5,6 +5,10 @@ import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
 class NotPassableCellException : Exception()
 
 class RectangularMap(val width: Int, val height: Int) : StaticMap {
+    override fun getNumberOfCells(): Int {
+        return width * height
+    }
+
     override fun isPassable(coordinates: Vector2D): Boolean {
         return coordinates.x in 0..(width - 1) && coordinates.y in 0..(height - 1)
     }

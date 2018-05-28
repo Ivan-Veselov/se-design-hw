@@ -108,4 +108,8 @@ class RoomsCorridorsMap(
         allCells.shuffle()
         return allCells.take(amount)
     }
+
+    override fun getNumberOfCells(): Int {
+        return passableCells.size
+    }
 }

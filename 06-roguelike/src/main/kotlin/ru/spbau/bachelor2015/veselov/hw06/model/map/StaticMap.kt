@@ -8,4 +8,6 @@ interface StaticMap {
     fun distanceBetween(coordinates1: Vector2D, coordinates2: Vector2D): Int
 
     fun uniformlyDistributedCells(amount: Int): List<Vector2D>
+
+    fun getNumberOfCells(): Int
 }

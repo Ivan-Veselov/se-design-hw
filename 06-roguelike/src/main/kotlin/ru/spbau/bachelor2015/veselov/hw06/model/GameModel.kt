@@ -2,6 +2,7 @@ package ru.spbau.bachelor2015.veselov.hw06.model
 
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 import ru.spbau.bachelor2015.veselov.hw06.model.map.RoomsCorridorsMap
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.BigRat
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.Exit
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.PlayerCharacter
 
@@ -20,9 +21,17 @@ class GameModel {
     private val exit = Exit(spaceManager)
 
     init {
-        val cells = spaceManager.staticMap.uniformlyDistributedCells(2)
+        val cellsInMaze = spaceManager.staticMap.getNumberOfCells()
+        val numberOfMonsters = cellsInMaze * 2 / 100
+
+        val cells = spaceManager.staticMap.uniformlyDistributedCells(numberOfMonsters + 2)
         playerCharacter.putOn(cells[0])
         exit.putOn(cells[1])
+
+        cells.drop(2).forEach {
+            val monster = BigRat(spaceManager)
+            monster.putOn(it)
+        }
     }
 
     fun getPlayer(): PlayerCharacterView {
