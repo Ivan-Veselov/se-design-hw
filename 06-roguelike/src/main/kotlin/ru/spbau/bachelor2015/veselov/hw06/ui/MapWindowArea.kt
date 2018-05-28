@@ -36,6 +36,10 @@ class MapWindowArea(
     )
 
     private val layerVisitor = object : SpatialObjectViewVisitor<Layer> {
+        override fun visit(chest: ChestView): Layer {
+            return Layer.STATIC
+        }
+
         override fun visit(monster: MonsterView): Layer {
             return Layer.UNIT
         }
@@ -55,6 +59,10 @@ class MapWindowArea(
     }
 
     private val textCharacterVisitor = object : SpatialObjectViewVisitor<TextCharacter> {
+        override fun visit(chest: ChestView): TextCharacter {
+            return TextCharacter('m')
+        }
+
         override fun visit(monster: MonsterView): TextCharacter {
             return TextCharacter('q')
         }

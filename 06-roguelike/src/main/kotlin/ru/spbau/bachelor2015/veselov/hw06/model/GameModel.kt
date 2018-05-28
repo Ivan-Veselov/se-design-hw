@@ -21,12 +21,21 @@ class GameModel {
     init {
         val cellsInMaze = spaceManager.staticMap.getNumberOfCells()
         val numberOfMonsters = cellsInMaze * 2 / 100
+        val numberOfChests = cellsInMaze * 2 / 100
 
-        val cells = spaceManager.staticMap.uniformlyDistributedCells(numberOfMonsters + 2)
+        val cells = spaceManager.staticMap.uniformlyDistributedCells(
+            numberOfChests + numberOfMonsters + 2
+        )
+
         playerCharacter.putOn(cells[0])
         exit.putOn(cells[1])
 
-        cells.drop(2).forEach {
+        cells.drop(2).take(numberOfChests).forEach {
+            val chest = Chest(spaceManager, playerCharacter)
+            chest.putOn(it)
+        }
+
+        cells.drop(2 + numberOfChests).take(numberOfMonsters).forEach {
             val centre = MonsterAreaCentre(spaceManager)
             centre.putOn(it)
 

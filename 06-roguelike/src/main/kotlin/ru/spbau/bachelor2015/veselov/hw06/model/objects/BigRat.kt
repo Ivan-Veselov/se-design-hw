@@ -27,6 +27,10 @@ class BigRat(
 
     override fun willStepOnTheSameCellWith(other: SpaceManager.SpatialObject): Boolean {
         return other.accept(object : SpatialObjectVisitor<Boolean> {
+            override fun visit(chest: Chest): Boolean {
+                return true
+            }
+
             override fun visit(player: PlayerCharacter): Boolean {
                 return false
             }

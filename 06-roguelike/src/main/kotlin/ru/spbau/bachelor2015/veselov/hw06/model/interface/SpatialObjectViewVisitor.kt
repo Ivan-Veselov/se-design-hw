@@ -8,4 +8,6 @@ interface SpatialObjectViewVisitor<R> {
     fun visit(monsterAreaCentre: MonsterAreaCentreView): R
 
     fun visit(monster: MonsterView): R
+
+    fun visit(chest: ChestView): R
 }
