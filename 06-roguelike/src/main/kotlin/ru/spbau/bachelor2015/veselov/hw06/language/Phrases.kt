@@ -12,4 +12,10 @@ object Phrases {
     const val WIN_PHRASE = "You have won!"
 
     const val LOSE_PHRASE = "Game is over!"
+
+    const val HELMET = "helmet"
+
+    const val SWORD = "sword"
+
+    const val HEALING_POTION = "healing potion"
 }
