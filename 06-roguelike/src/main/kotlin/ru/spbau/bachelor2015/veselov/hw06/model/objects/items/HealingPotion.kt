@@ -5,7 +5,7 @@ class HealingPotion : UsableItem() {
         return visitor.visit(this)
     }
 
-    override fun <R> accept(visitor: UsableItemViewVisitor<R>): R {
+    override fun <R> accept(visitor: UsableItemVisitor<R>): R {
         return visitor.visit(this)
     }
 }

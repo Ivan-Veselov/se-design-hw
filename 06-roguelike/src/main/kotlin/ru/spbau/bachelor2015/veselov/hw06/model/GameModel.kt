@@ -1,10 +1,10 @@
 package ru.spbau.bachelor2015.veselov.hw06.model
 
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.UsableItemView
 import ru.spbau.bachelor2015.veselov.hw06.model.map.RoomsCorridorsMap
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.*
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemApplier
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.UsableItem
 
 class GameIsOverException : Exception()
 
@@ -77,7 +77,7 @@ class GameModel {
         }
     }
 
-    fun useItem(item: UsableItemView) {
+    fun useItem(item: UsableItem) {
         ItemApplier.useItemOn(playerCharacter, item)
     }
 

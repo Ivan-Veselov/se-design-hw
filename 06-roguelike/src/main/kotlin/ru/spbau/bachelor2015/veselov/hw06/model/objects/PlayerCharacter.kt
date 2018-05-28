@@ -4,10 +4,10 @@ import ru.spbau.bachelor2015.veselov.hw06.model.BattleUnitVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.SpatialObjectVisitor
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.InventoryView
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectViewVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory.Inventory
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.EquipmentType
 
 class PlayerCharacter(
     spaceManager: SpaceManager
@@ -21,11 +21,7 @@ class PlayerCharacter(
         Pair(Attribute.AGILITY, 5)
     )
 ), PlayerCharacterView {
-    override fun getInventory(): InventoryView {
-        return inventory
-    }
-
-    val inventory = Inventory()
+    override val inventory = Inventory()
 
     override fun willStepOnTheSameCellWith(other: SpaceManager.SpatialObject): Boolean {
         return other.accept(object : SpatialObjectVisitor<Boolean> {
@@ -64,7 +60,9 @@ class PlayerCharacter(
     }
 
     override fun getActualAttribute(attribute: Attribute): Int {
-        return getBaseAttribute(attribute)
+        return EquipmentType.values().map {
+            inventory.getEquippedItem(it)?.getAttributeInfluence(attribute)
+        }.sumBy { it ?: 0 } + getBaseAttribute(attribute)
     }
 
     override fun makeStep() { }

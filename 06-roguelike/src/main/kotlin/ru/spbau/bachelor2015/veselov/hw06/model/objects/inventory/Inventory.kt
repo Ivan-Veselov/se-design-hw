@@ -1,27 +1,27 @@
 package ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory
 
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.InventoryView
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.EquipmentType
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.EquippableItem
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemHolder
 
-class Inventory : ItemHolder(), InventoryView {
-    private val equipment = mutableMapOf<EquipmentType, EquippableItem?>()
+class Inventory : ItemHolder() {
+    private val equipment = EquipmentType.values().map { Pair(it, ItemHolder()) }.toMap()
 
-    override fun unequip(type: EquipmentType) {
-        equipment[type]?.placeInto(this)
-        equipment[type] = null
+    fun unequip(type: EquipmentType) {
+        equipment[type]!!.getItems().toList().forEach {
+            it.placeInto(this)
+        }
     }
 
-    override fun equip(item: EquippableItem) {
+    fun equip(item: EquippableItem) {
         if (equipment.containsKey(item.equipmentType)) {
             unequip(item.equipmentType)
         }
 
-        equipment[item.equipmentType] = item
+        item.placeInto(equipment[item.equipmentType]!!)
     }
 
-    override fun getEquippedItem(type: EquipmentType): EquippableItem? {
-        return equipment[type]
+    fun getEquippedItem(type: EquipmentType): EquippableItem? {
+        return equipment[type]!!.getItems().firstOrNull() as EquippableItem?
     }
 }

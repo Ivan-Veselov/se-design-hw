@@ -1,7 +1,5 @@
 package ru.spbau.bachelor2015.veselov.hw06.model.objects.items
 
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.ItemView
-
 open class ItemHolder {
     private val items = mutableSetOf<Item>()
 
@@ -9,8 +7,10 @@ open class ItemHolder {
         return items.toList()
     }
 
-    abstract class Item : ItemView {
+    abstract class Item {
         private var place: ItemHolder? = null
+
+        abstract fun <R> accept(visitor: ItemVisitor<R>): R
 
         fun placeInto(holder: ItemHolder) {
             if (place != null) {

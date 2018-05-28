@@ -8,8 +8,9 @@ import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.language.Phrases.INVENTORY
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
-import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.UsableItemView
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.EquippableItem
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemNameResolver
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.UsableItem
 
 class InventoryScreen(
     private val screen: Screen,
@@ -19,13 +20,13 @@ class InventoryScreen(
         val textGUI = MultiWindowTextGUI(screen)
         textGUI.theme = SimpleTheme.makeTheme(
             true,
-                TextColor.ANSI.WHITE,
-                TextColor.ANSI.BLACK,
-                TextColor.ANSI.BLACK,
-                TextColor.ANSI.WHITE,
-                TextColor.ANSI.BLACK,
-                TextColor.ANSI.WHITE,
-                TextColor.ANSI.BLACK
+            TextColor.ANSI.WHITE,
+            TextColor.ANSI.BLACK,
+            TextColor.ANSI.BLACK,
+            TextColor.ANSI.WHITE,
+            TextColor.ANSI.BLACK,
+            TextColor.ANSI.WHITE,
+            TextColor.ANSI.BLACK
         )
 
         val window = BasicWindow(INVENTORY)
@@ -47,13 +48,24 @@ class InventoryScreen(
         val contentPanel = Panel(LinearLayout(Direction.VERTICAL))
         val itemsList = ActionListBox(TerminalSize(14, 10))
 
-        gameModel.getPlayer().getInventory().getItems().forEach {
-            itemsList.addItem(it.accept(ItemNameResolver)) {
-                if (it is UsableItemView) {
-                    gameModel.useItem(it)
-                    window.close()
+        val inventory = gameModel.getPlayer().inventory
+        inventory.getItems().forEach {
+            itemsList.addItem(it.accept(ItemNameResolver), object : Runnable {
+                override fun run() {
+                    if (it is UsableItem) {
+                        gameModel.useItem(it)
+                        window.close()
+                    } else if (it is EquippableItem) {
+                        val equipped = inventory.getEquippedItem(it.equipmentType)
+                        if (equipped != null) {
+                            itemsList.addItem(equipped.accept(ItemNameResolver), this)
+                        }
+
+                        inventory.equip(it)
+                        itemsList.removeItem(itemsList.selectedIndex)
+                    }
                 }
-            }
+            })
         }
 
         contentPanel.addComponent(itemsList)
