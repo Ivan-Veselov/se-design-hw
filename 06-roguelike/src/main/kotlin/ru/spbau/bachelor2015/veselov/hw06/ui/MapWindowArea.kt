@@ -6,11 +6,12 @@ import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
 import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.ExitView
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.MonsterAreaCentreView
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectViewVisitor
 
 enum class Layer {
-    STATIC, UNIT, DYNAMIC
+    INVISIBLE, STATIC, UNIT, DYNAMIC
 }
 
 class MapWindowArea(
@@ -38,22 +39,30 @@ class MapWindowArea(
     )
 
     private val layerVisitor = object : SpatialObjectViewVisitor<Layer> {
+        override fun visit(monsterAreaCentre: MonsterAreaCentreView): Layer {
+            return Layer.INVISIBLE
+        }
+
         override fun visit(player: PlayerCharacterView): Layer {
             return Layer.UNIT
         }
 
-        override fun visit(player: ExitView): Layer {
+        override fun visit(exit: ExitView): Layer {
             return Layer.STATIC
         }
 
     }
 
     private val textCharacterVisitor = object : SpatialObjectViewVisitor<TextCharacter> {
+        override fun visit(monsterAreaCentre: MonsterAreaCentreView): TextCharacter {
+            return TextCharacter('?')
+        }
+
         override fun visit(player: PlayerCharacterView): TextCharacter {
             return TextCharacter('@')
         }
 
-        override fun visit(player: ExitView): TextCharacter {
+        override fun visit(exit: ExitView): TextCharacter {
             return TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE)
         }
 
@@ -70,35 +79,37 @@ class MapWindowArea(
                 val vector = Vector2D(column - playerColumn, -(row - playerRow))
 
                 if (!playerCharacter.isPassableRelatively(vector)) {
-                    mapWindow.redraw(column, row, TextCharacter(' '))
+                    mapWindow.draw(column, row, TextCharacter(' '))
                     continue
                 }
 
-                val objectsInCell = playerCharacter.getObjectsRelatively(vector)
+                val objectsInCell =
+                        playerCharacter.getObjectsRelatively(vector)
+                                       .filter { it.accept(layerVisitor) != Layer.INVISIBLE}
 
                 if (objectsInCell.isEmpty()) {
-                    mapWindow.redraw(column, row, TextCharacter('.'))
+                    mapWindow.draw(column, row, TextCharacter('.'))
                     continue
                 }
 
                 val objectOnTop = objectsInCell.maxBy { it.accept(layerVisitor) }
-                mapWindow.redraw(column, row, objectOnTop!!.accept(textCharacterVisitor))
+                mapWindow.draw(column, row, objectOnTop!!.accept(textCharacterVisitor))
             }
         }
 
         for (column in 0..(borderWindow.width - 1)) {
-            borderWindow.redraw(column, 0, TextCharacter('\u2550'))
-            borderWindow.redraw(column, borderWindow.height - 1, TextCharacter('\u2550'))
+            borderWindow.draw(column, 0, TextCharacter('\u2550'))
+            borderWindow.draw(column, borderWindow.height - 1, TextCharacter('\u2550'))
         }
 
         for (row in 0..(borderWindow.height - 1)) {
-            borderWindow.redraw(0, row, TextCharacter('\u2551'))
-            borderWindow.redraw(borderWindow.width - 1, row, TextCharacter('\u2551'))
+            borderWindow.draw(0, row, TextCharacter('\u2551'))
+            borderWindow.draw(borderWindow.width - 1, row, TextCharacter('\u2551'))
         }
 
-        borderWindow.redraw(0, 0, TextCharacter('\u2554'))
-        borderWindow.redraw(borderWindow.width - 1, 0, TextCharacter('\u2557'))
-        borderWindow.redraw(0, borderWindow.height - 1, TextCharacter('\u255A'))
-        borderWindow.redraw(borderWindow.width - 1, borderWindow.height - 1, TextCharacter('\u255D'))
+        borderWindow.draw(0, 0, TextCharacter('\u2554'))
+        borderWindow.draw(borderWindow.width - 1, 0, TextCharacter('\u2557'))
+        borderWindow.draw(0, borderWindow.height - 1, TextCharacter('\u255A'))
+        borderWindow.draw(borderWindow.width - 1, borderWindow.height - 1, TextCharacter('\u255D'))
     }
 }

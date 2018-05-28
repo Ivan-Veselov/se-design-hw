@@ -10,7 +10,7 @@ class Window(
     val width: Int,
     val height: Int
 ) {
-    fun redraw(column: Int, row: Int, character: TextCharacter) {
+    fun draw(column: Int, row: Int, character: TextCharacter) {
         screen.setCharacter(
             windowColumn + column,
             windowRow + row,

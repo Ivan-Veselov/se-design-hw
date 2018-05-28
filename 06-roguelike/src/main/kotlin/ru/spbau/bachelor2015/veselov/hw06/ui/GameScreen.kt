@@ -1,7 +1,6 @@
 package ru.spbau.bachelor2015.veselov.hw06.ui
 
 import com.googlecode.lanterna.input.KeyStroke
-import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.model.Direction
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
@@ -10,14 +9,22 @@ class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScree
     private val mapWindowArea = MapWindowArea(
         gameModel,
         screen,
-        0,
-        0,
+        mapAreaColumn,
+        mapAreaRow,
         mapAreaWidth,
         mapAreaHeight
     )
 
+    private val attributesWindowArea = AttributesWindowArea(
+        gameModel.getPlayer(),
+        screen,
+        mapAreaColumn,
+        mapAreaRow + mapAreaHeight
+    )
+
     override fun redraw() {
         mapWindowArea.redraw()
+        attributesWindowArea.redraw()
     }
 
     override fun handleInput(stroke: KeyStroke): ConsoleScreen.Response {
@@ -49,6 +56,10 @@ class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScree
     }
 
     private companion object {
+        const val mapAreaRow = 0
+
+        const val mapAreaColumn = 0
+
         const val mapAreaWidth = 81
 
         const val mapAreaHeight = 21

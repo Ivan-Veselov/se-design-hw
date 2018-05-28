@@ -26,9 +26,7 @@ abstract class BattleUnit(
         attributes[attribute] = value
     }
 
-    abstract fun getActualAttribute(attribute: Attribute): Int
-
-    fun getCurrentHealth(): Int {
+    override fun getCurrentHealth(): Int {
         return health
     }
 
