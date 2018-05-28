@@ -120,7 +120,9 @@ class SpaceManager(
                 throw ObjectWithNoPositionException()
             }
 
-            return Direction.values().map {
+            return Direction.values().filter {
+                this.canBeTranslatedOn(it.vector)
+            }.map {
                 Pair(it, spaceManager.staticMap.distanceBetween(
                     myCoordinates.add(it.vector),
                     otherCoordinates

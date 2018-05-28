@@ -2,10 +2,7 @@ package ru.spbau.bachelor2015.veselov.hw06.model
 
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 import ru.spbau.bachelor2015.veselov.hw06.model.map.RoomsCorridorsMap
-import ru.spbau.bachelor2015.veselov.hw06.model.objects.BigRat
-import ru.spbau.bachelor2015.veselov.hw06.model.objects.Exit
-import ru.spbau.bachelor2015.veselov.hw06.model.objects.Monster
-import ru.spbau.bachelor2015.veselov.hw06.model.objects.PlayerCharacter
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.*
 
 class GameIsOverException : Exception()
 
@@ -30,7 +27,10 @@ class GameModel {
         exit.putOn(cells[1])
 
         cells.drop(2).forEach {
-            val monster = BigRat(spaceManager)
+            val centre = MonsterAreaCentre(spaceManager)
+            centre.putOn(it)
+
+            val monster = BigRat(spaceManager, centre, 3, playerCharacter)
             monster.putOn(it)
         }
     }
