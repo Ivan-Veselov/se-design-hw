@@ -41,6 +41,7 @@ class Application {
                 val response = consoleScreen.handleInput(stroke)
                 if (response.close) {
                     screenStack.removeAt(screenStack.size - 1)
+                    screen.clear()
                 }
 
                 if (response.newConsoleScreen != null) {

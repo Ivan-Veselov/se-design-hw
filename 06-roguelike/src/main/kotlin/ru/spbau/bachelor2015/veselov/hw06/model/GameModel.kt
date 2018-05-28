@@ -70,6 +70,10 @@ class GameModel {
         return exit.objectsOnTheSameCell().contains(playerCharacter)
     }
 
+    fun isLost(): Boolean {
+        return playerCharacter.isDead()
+    }
+
     fun getLog(): GameLog {
         return gameObjectsManager.log
     }

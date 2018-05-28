@@ -2,10 +2,12 @@ package ru.spbau.bachelor2015.veselov.hw06.ui
 
 import com.googlecode.lanterna.input.KeyStroke
 import com.googlecode.lanterna.screen.Screen
+import ru.spbau.bachelor2015.veselov.hw06.language.Phrases.LOSE_PHRASE
+import ru.spbau.bachelor2015.veselov.hw06.language.Phrases.WIN_PHRASE
 import ru.spbau.bachelor2015.veselov.hw06.model.Direction
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
 
-class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScreen {
+class GameScreen(private val gameModel: GameModel, private val screen: Screen): ConsoleScreen {
     private val mapWindowArea = MapWindowArea(
         gameModel,
         screen,
@@ -59,7 +61,11 @@ class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScree
         }
 
         if (gameModel.isWon()) {
-            return ConsoleScreen.Response(null, true)
+            return ConsoleScreen.Response(TextScreen(screen, WIN_PHRASE), true)
+        }
+
+        if (gameModel.isLost()) {
+            return ConsoleScreen.Response(TextScreen(screen, LOSE_PHRASE), true)
         }
 
         return ConsoleScreen.Response(null, false)

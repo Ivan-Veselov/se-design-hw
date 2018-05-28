@@ -8,4 +8,8 @@ object Phrases {
     const val ATTACK = "ATK"
 
     const val AGILITY = "AGL"
+
+    const val WIN_PHRASE = "You have won!"
+
+    const val LOSE_PHRASE = "Game is over!"
 }
