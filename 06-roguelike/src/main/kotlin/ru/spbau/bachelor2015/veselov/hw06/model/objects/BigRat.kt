@@ -1,5 +1,6 @@
 package ru.spbau.bachelor2015.veselov.hw06.model.objects
 
+import ru.spbau.bachelor2015.veselov.hw06.model.BattleUnitVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.SpatialObjectVisitor
@@ -50,6 +51,10 @@ class BigRat(
     }
 
     override fun <R> accept(visitor: SpatialObjectViewVisitor<R>): R {
+        return visitor.visit(this)
+    }
+
+    override fun <R> accept(visitor: BattleUnitVisitor<R>): R {
         return visitor.visit(this)
     }
 }

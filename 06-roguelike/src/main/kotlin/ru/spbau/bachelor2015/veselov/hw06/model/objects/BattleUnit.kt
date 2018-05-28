@@ -1,5 +1,6 @@
 package ru.spbau.bachelor2015.veselov.hw06.model.objects
 
+import ru.spbau.bachelor2015.veselov.hw06.model.BattleUnitVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.BattleUnitView
@@ -17,6 +18,8 @@ abstract class BattleUnit(
     private val attributes = attributes.toMutableMap()
 
     private var health: Int = getBaseAttribute(Attribute.HEALTH_AMOUNT)
+
+    abstract fun <R> accept(visitor: BattleUnitVisitor<R>): R
 
     fun getBaseAttribute(attribute: Attribute): Int {
         return attributes[attribute] ?: 0
@@ -49,8 +52,11 @@ abstract class BattleUnit(
         val damage = random.nextInt(maxDamage + 1)
         other.health -= damage
 
+        getLog().addAttackEntry(this, other, damage)
+
         if (other.health <= 0) {
             other.health = 0
+            getLog().addDieEntry(other)
             other.destroy()
         }
     }

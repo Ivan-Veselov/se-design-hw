@@ -22,9 +22,19 @@ class GameScreen(private val gameModel: GameModel, screen: Screen): ConsoleScree
         mapAreaRow + mapAreaHeight
     )
 
+    private val logWindowArea = LogWindowArea(
+        gameModel.getLog(),
+        screen,
+        mapAreaColumn + mapAreaWidth,
+        mapAreaRow,
+        0,
+        mapAreaHeight
+    )
+
     override fun redraw() {
         mapWindowArea.redraw()
         attributesWindowArea.redraw()
+        logWindowArea.redraw()
     }
 
     override fun handleInput(stroke: KeyStroke): ConsoleScreen.Response {

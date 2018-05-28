@@ -69,4 +69,8 @@ class GameModel {
     fun isWon(): Boolean {
         return exit.objectsOnTheSameCell().contains(playerCharacter)
     }
+
+    fun getLog(): GameLog {
+        return gameObjectsManager.log
+    }
 }

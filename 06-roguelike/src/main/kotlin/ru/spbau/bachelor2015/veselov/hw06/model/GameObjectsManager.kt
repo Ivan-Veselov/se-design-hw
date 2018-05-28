@@ -25,6 +25,8 @@ class GameObjectsManager {
         return@Comparator 0
     })
 
+    val log = GameLog()
+
     fun makeStep() {
         gameObjects.forEach {
             it.makeStep()
@@ -43,6 +45,10 @@ class GameObjectsManager {
 
         open fun destroy() {
             gameObjectsManager.gameObjects.remove(this)
+        }
+
+        protected fun getLog(): GameLog {
+            return gameObjectsManager.log
         }
     }
 }
