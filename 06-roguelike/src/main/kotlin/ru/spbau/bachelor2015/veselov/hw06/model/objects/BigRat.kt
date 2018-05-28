@@ -51,7 +51,7 @@ class BigRat(
             return
         }
 
-        if (homeCentre.distanceTo(player) <= radius) {
+        if (!player.isDead() && homeCentre.distanceTo(player) <= radius) {
             attackStep()
             return
         }

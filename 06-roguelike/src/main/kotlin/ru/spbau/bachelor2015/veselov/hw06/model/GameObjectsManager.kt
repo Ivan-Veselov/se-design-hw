@@ -25,12 +25,22 @@ class GameObjectsManager {
         return@Comparator 0
     })
 
+    private val destroyedObjects = mutableSetOf<GameObject>()
+
     val log = GameLog()
 
     fun makeStep() {
         gameObjects.forEach {
-            it.makeStep()
+            if (!destroyedObjects.contains(it)) {
+                it.makeStep()
+            }
         }
+
+        destroyedObjects.forEach {
+            gameObjects.remove(it)
+        }
+
+        destroyedObjects.clear()
     }
 
     abstract class GameObject(
@@ -44,7 +54,7 @@ class GameObjectsManager {
         abstract fun makeStep()
 
         open fun destroy() {
-            gameObjectsManager.gameObjects.remove(this)
+            gameObjectsManager.destroyedObjects.add(this)
         }
 
         protected fun getLog(): GameLog {
