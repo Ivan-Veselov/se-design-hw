@@ -19,7 +19,7 @@ class MapWindowArea(
     width: Int,
     height: Int
 ) {
-    private val borderWindow = Window(
+    private val borderWindow = ScreenWindow(
         screen,
         areaColumn,
         areaRow,
@@ -27,7 +27,7 @@ class MapWindowArea(
         height
     )
 
-    private val mapWindow = Window(
+    private val mapWindow = ScreenWindow(
         screen,
         areaColumn + 1,
         areaRow + 1,

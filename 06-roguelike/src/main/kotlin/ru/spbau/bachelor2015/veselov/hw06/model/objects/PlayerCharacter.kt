@@ -4,6 +4,7 @@ import ru.spbau.bachelor2015.veselov.hw06.model.BattleUnitVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.GameObjectPriority
 import ru.spbau.bachelor2015.veselov.hw06.model.SpaceManager
 import ru.spbau.bachelor2015.veselov.hw06.model.SpatialObjectVisitor
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.InventoryView
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.SpatialObjectViewVisitor
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory.Inventory
@@ -20,6 +21,10 @@ class PlayerCharacter(
         Pair(Attribute.AGILITY, 5)
     )
 ), PlayerCharacterView {
+    override fun getInventory(): InventoryView {
+        return inventory
+    }
+
     val inventory = Inventory()
 
     override fun willStepOnTheSameCellWith(other: SpaceManager.SpatialObject): Boolean {

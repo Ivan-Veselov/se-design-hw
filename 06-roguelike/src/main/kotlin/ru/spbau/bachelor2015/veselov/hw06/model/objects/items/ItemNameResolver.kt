@@ -1,8 +1,12 @@
-package ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory
+package ru.spbau.bachelor2015.veselov.hw06.model.objects.items
 
 import ru.spbau.bachelor2015.veselov.hw06.language.Phrases
 
 object ItemNameResolver : ItemVisitor<String> {
+    override fun visit(axe: Axe): String {
+        return Phrases.AXE
+    }
+
     override fun visit(helmet: Helmet): String {
         return Phrases.HELMET
     }

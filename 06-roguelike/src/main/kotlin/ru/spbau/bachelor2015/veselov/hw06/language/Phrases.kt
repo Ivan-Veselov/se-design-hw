@@ -17,5 +17,9 @@ object Phrases {
 
     const val SWORD = "sword"
 
+    const val AXE = "axe"
+
     const val HEALING_POTION = "healing potion"
+
+    const val INVENTORY = "Inventory"
 }

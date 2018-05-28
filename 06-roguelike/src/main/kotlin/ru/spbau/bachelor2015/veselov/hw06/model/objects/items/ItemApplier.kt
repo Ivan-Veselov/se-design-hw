@@ -1,0 +1,14 @@
+package ru.spbau.bachelor2015.veselov.hw06.model.objects.items
+
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.BattleUnit
+
+object ItemApplier {
+    fun useItemOn(unit: BattleUnit, item: UsableItem) {
+        item.accept(object : UsableItemVisitor<Unit> {
+            override fun visit(healingPotion: HealingPotion) {
+                unit.heal(2)
+                item.remove()
+            }
+        })
+    }
+}

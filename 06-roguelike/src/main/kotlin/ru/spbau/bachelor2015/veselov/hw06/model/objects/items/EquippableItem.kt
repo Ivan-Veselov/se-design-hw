@@ -1,4 +1,4 @@
-package ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory
+package ru.spbau.bachelor2015.veselov.hw06.model.objects.items
 
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.Attribute
 

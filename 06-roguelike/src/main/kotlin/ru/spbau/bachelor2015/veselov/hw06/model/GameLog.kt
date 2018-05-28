@@ -3,8 +3,8 @@ package ru.spbau.bachelor2015.veselov.hw06.model
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.BattleUnit
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.BigRat
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.PlayerCharacter
-import ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory.ItemHolder
-import ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory.ItemNameResolver
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemHolder
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemNameResolver
 
 class GameLog {
     private val messages = mutableListOf<String>()

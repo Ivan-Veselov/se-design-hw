@@ -1,6 +1,7 @@
 package ru.spbau.bachelor2015.veselov.hw06.ui
 
 import com.googlecode.lanterna.input.KeyStroke
+import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.screen.Screen
 import ru.spbau.bachelor2015.veselov.hw06.language.Phrases.LOSE_PHRASE
 import ru.spbau.bachelor2015.veselov.hw06.language.Phrases.WIN_PHRASE
@@ -40,6 +41,10 @@ class GameScreen(private val gameModel: GameModel, private val screen: Screen): 
     }
 
     override fun handleInput(stroke: KeyStroke): ConsoleScreen.Response {
+        if (stroke.keyType == KeyType.Escape) {
+            return ConsoleScreen.Response(null, true)
+        }
+
         when (stroke.character) {
             '1' -> gameModel.makePlayerAction(Direction.SOUTHWEST)
 
@@ -56,6 +61,8 @@ class GameScreen(private val gameModel: GameModel, private val screen: Screen): 
             '8' -> gameModel.makePlayerAction(Direction.NORTH)
 
             '9' -> gameModel.makePlayerAction(Direction.NORTHEAST)
+
+            'i' -> InventoryScreen(screen, gameModel.getPlayer()).open()
 
             else -> {}
         }

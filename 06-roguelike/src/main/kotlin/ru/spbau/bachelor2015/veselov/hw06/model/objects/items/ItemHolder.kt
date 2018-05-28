@@ -1,4 +1,6 @@
-package ru.spbau.bachelor2015.veselov.hw06.model.objects.inventory
+package ru.spbau.bachelor2015.veselov.hw06.model.objects.items
+
+import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.ItemView
 
 open class ItemHolder {
     private val items = mutableSetOf<Item>()
@@ -7,10 +9,8 @@ open class ItemHolder {
         return items.toList()
     }
 
-    abstract class Item {
+    abstract class Item : ItemView {
         private var place: ItemHolder? = null
-
-        abstract fun <R> accept(visitor: ItemVisitor<R>): R
 
         fun placeInto(holder: ItemHolder) {
             if (place != null) {
