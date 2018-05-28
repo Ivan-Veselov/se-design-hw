@@ -4,6 +4,7 @@ import ru.spbau.bachelor2015.veselov.hw06.model.`interface`.PlayerCharacterView
 import ru.spbau.bachelor2015.veselov.hw06.model.map.RoomsCorridorsMap
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.BigRat
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.Exit
+import ru.spbau.bachelor2015.veselov.hw06.model.objects.Monster
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.PlayerCharacter
 
 class GameIsOverException : Exception()
@@ -49,6 +50,19 @@ class GameModel {
             if (!isWon()) {
                 gameObjectsManager.makeStep()
             }
+
+            return
+        }
+
+        val monsters = playerCharacter.getObjectsRelatively(direction.vector)
+                                      .filter { it is Monster }
+
+        if (monsters.isNotEmpty()) {
+            monsters.forEach {
+                playerCharacter.attack(it as Monster)
+            }
+
+            gameObjectsManager.makeStep()
         }
     }
 
