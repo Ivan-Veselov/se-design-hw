@@ -6,6 +6,9 @@ import ru.spbau.bachelor2015.veselov.hw06.model.objects.PlayerCharacter
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemHolder
 import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.ItemNameResolver
 
+/**
+ * Log that stores game events messages.
+ */
 class GameLog {
     private val messages = mutableListOf<String>()
 
@@ -31,6 +34,9 @@ class GameLog {
         messages.add("You picked up a ${item.accept(ItemNameResolver)}")
     }
 
+    /**
+     * Returns list of all messages.
+     */
     fun getMessages(): List<String> {
         return messages
     }

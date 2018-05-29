@@ -6,6 +6,9 @@ import org.jgrapht.traverse.BreadthFirstIterator
 import ru.spbau.bachelor2015.veselov.hw06.model.Direction
 import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
 
+/**
+ * A map that has rooms which are connected with a corridors.
+ */
 class RoomsCorridorsMap(
     roomsInColumn: Int,
     roomsInRow: Int,

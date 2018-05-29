@@ -11,6 +11,9 @@ enum class Attribute {
     HEALTH_AMOUNT, DEFENCE, ATTACK, AGILITY;
 }
 
+/**
+ * A space object that can fight.
+ */
 abstract class BattleUnit(
     spaceManager: SpaceManager,
     priority: GameObjectPriority,
@@ -22,10 +25,16 @@ abstract class BattleUnit(
 
     abstract fun <R> accept(visitor: BattleUnitVisitor<R>): R
 
+    /**
+     * Returns base value of an given attribute.
+     */
     fun getBaseAttribute(attribute: Attribute): Int {
         return attributes[attribute] ?: 0
     }
 
+    /**
+     * Changes base value of a given attribute.
+     */
     fun setBaseAttribute(attribute: Attribute, value: Int) {
         attributes[attribute] = value
     }
@@ -34,14 +43,23 @@ abstract class BattleUnit(
         return health
     }
 
+    /**
+     * Returns true if health of this unit is equal to zero.
+     */
     fun isDead(): Boolean {
         return health == 0
     }
 
+    /**
+     * Adds given amount of health points to this unit.
+     */
     fun heal(points: Int) {
         health = min(health + points, getBaseAttribute(Attribute.HEALTH_AMOUNT))
     }
 
+    /**
+     * Attack another unit and decreases it's health.
+     */
     fun attack(other: BattleUnit) {
         val maxDamage =
             getActualAttribute(Attribute.ATTACK) - other.getBaseAttribute(Attribute.DEFENCE)

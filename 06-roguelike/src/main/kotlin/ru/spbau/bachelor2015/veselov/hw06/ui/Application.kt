@@ -7,6 +7,9 @@ import com.googlecode.lanterna.screen.TerminalScreen
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory
 import ru.spbau.bachelor2015.veselov.hw06.model.GameModel
 
+/**
+ * Class that represents an application and have main game cycle.
+ */
 class Application {
     private val screen: Screen
 

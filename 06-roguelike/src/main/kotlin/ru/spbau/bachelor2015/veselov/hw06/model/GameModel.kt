@@ -8,6 +8,9 @@ import ru.spbau.bachelor2015.veselov.hw06.model.objects.items.UsableItem
 
 class GameIsOverException : Exception()
 
+/**
+ * This class represents a game and provides an interface to communicate with a game through.
+ */
 class GameModel {
     private val gameObjectsManager = GameObjectsManager()
 
@@ -46,10 +49,16 @@ class GameModel {
         }
     }
 
+    /**
+     * Returns a player character view.
+     */
     fun getPlayer(): PlayerCharacterView {
         return playerCharacter
     }
 
+    /**
+     * Makes an action by a player in a given direction.
+     */
     fun makePlayerAction(direction: Direction) {
         if (isWon()) {
             throw GameIsOverException()
@@ -77,18 +86,30 @@ class GameModel {
         }
     }
 
+    /**
+     * Uses given usable item on player.
+     */
     fun useItem(item: UsableItem) {
         ItemApplier.useItemOn(playerCharacter, item)
     }
 
+    /**
+     * Returns true if player has reached the exit.
+     */
     fun isWon(): Boolean {
         return exit.objectsOnTheSameCell().contains(playerCharacter)
     }
 
+    /**
+     * Returns true if player is dead.
+     */
     fun isLost(): Boolean {
         return playerCharacter.isDead()
     }
 
+    /**
+     * Returns game log.
+     */
     fun getLog(): GameLog {
         return gameObjectsManager.log
     }

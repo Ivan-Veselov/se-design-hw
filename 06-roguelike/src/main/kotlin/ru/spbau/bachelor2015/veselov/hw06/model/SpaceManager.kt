@@ -7,6 +7,9 @@ class InvalidCellToPutOnException: Exception()
 
 class ObjectWithNoPositionException: Exception()
 
+/**
+ * A manager that stores all spatial objects and ensures that map is in consistent state.
+ */
 class SpaceManager(
     private val gameObjectsManager: GameObjectsManager,
     val staticMap: StaticMap
@@ -37,6 +40,9 @@ class SpaceManager(
             return spaceManager.objectsInCell[coordinates.add(vector)]?.toList() ?: emptyList()
         }
 
+        /**
+         * Returns true if a given other spatial object is in adjacent cell.
+         */
         fun isInAdjacentCell(other: SpatialObject): Boolean {
             val myCoordinates = spaceManager.objectCoordinates[this]
             val otherCoordinates = spaceManager.objectCoordinates[other]
@@ -48,6 +54,9 @@ class SpaceManager(
             return myCoordinates.subtract(otherCoordinates).norm() == 1
         }
 
+        /**
+         * Returns true if a given other spatial object is in the same cell.
+         */
         fun isOnTheSameCell(other: SpatialObject): Boolean {
             val myCoordinates = spaceManager.objectCoordinates[this]
             val otherCoordinates = spaceManager.objectCoordinates[other]
@@ -59,6 +68,9 @@ class SpaceManager(
             return myCoordinates == otherCoordinates
         }
 
+        /**
+         * Returns true if this object can be put on a given cell.
+         */
         fun canBePutOn(coordinates: Vector2D): Boolean {
             return spaceManager.staticMap.isPassable(coordinates) &&
                 spaceManager.objectsInCell[coordinates]?.map {
@@ -66,6 +78,9 @@ class SpaceManager(
                 }?.all { it == true } ?: true
         }
 
+        /**
+         * Puts this object on a given cell.
+         */
         fun putOn(coordinates: Vector2D) {
             if (!canBePutOn(coordinates)) {
                 throw InvalidCellToPutOnException()
@@ -80,6 +95,9 @@ class SpaceManager(
             spaceManager.objectsInCell.getOrPut(coordinates) { mutableSetOf() }.add(this)
         }
 
+        /**
+         * Returns true if this object can be translated (moved by adding vector) on a given vector.
+         */
         fun canBeTranslatedOn(vector: Vector2D): Boolean {
             val coordinates = spaceManager.objectCoordinates[this] ?:
                 throw ObjectWithNoPositionException()
@@ -87,6 +105,9 @@ class SpaceManager(
             return canBePutOn(coordinates.add(vector))
         }
 
+        /**
+         * Translates this object on a given vector.
+         */
         fun translateOn(vector: Vector2D) {
             val coordinates = spaceManager.objectCoordinates[this] ?:
                 throw ObjectWithNoPositionException()
@@ -94,6 +115,9 @@ class SpaceManager(
             putOn(coordinates.add(vector))
         }
 
+        /**
+         * Returns list of objects that are on the same cell with this object.
+         */
         fun objectsOnTheSameCell(): List<SpatialObject> {
             val coordinates = spaceManager.objectCoordinates[this] ?:
                 throw ObjectWithNoPositionException()
@@ -101,6 +125,9 @@ class SpaceManager(
             return spaceManager.objectsInCell[coordinates]!!.toList()
         }
 
+        /**
+         * Returns distance to a given object.
+         */
         fun distanceTo(other: SpatialObject): Int {
             val myCoordinates = spaceManager.objectCoordinates[this]
             val otherCoordinates = spaceManager.objectCoordinates[other]
@@ -112,6 +139,9 @@ class SpaceManager(
             return spaceManager.staticMap.distanceBetween(myCoordinates, otherCoordinates)
         }
 
+        /**
+         * Returns distance to a given object from all neighbor cells.
+         */
         fun distanceDistributionTo(other: SpatialObject): Map<Direction, Int> {
             val myCoordinates = spaceManager.objectCoordinates[this]
             val otherCoordinates = spaceManager.objectCoordinates[other]
@@ -130,6 +160,9 @@ class SpaceManager(
             }.toMap()
         }
 
+        /**
+         * Destroys this object as game object and remove it also from a space manager.
+         */
         override fun destroy() {
             super.destroy()
 

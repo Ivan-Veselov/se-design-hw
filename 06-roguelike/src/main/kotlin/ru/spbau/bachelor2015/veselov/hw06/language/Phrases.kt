@@ -1,5 +1,8 @@
 package ru.spbau.bachelor2015.veselov.hw06.language
 
+/**
+ * This object stores all string literals.
+ */
 object Phrases {
     const val HEALTH_AMOUNT = "HLT"
 

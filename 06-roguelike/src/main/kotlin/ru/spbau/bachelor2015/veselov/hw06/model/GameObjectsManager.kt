@@ -4,6 +4,9 @@ enum class GameObjectPriority {
     LEAST, MONSTER, FIRE_WALL, STATIC_OBJECT;
 }
 
+/**
+ * Manager that stores all game objects that are aware of steps and have some position on a map.
+ */
 class GameObjectsManager {
     private val gameObjects = sortedSetOf<GameObject>(Comparator { o1, o2 ->
         if (o1.priority < o2.priority) {
@@ -29,6 +32,9 @@ class GameObjectsManager {
 
     val log = GameLog()
 
+    /**
+     * Makes a game turn by allowing all objects to execute their logic.
+     */
     fun makeStep() {
         gameObjects.forEach {
             if (!destroyedObjects.contains(it)) {
@@ -53,6 +59,10 @@ class GameObjectsManager {
 
         abstract fun makeStep()
 
+        /**
+         * Destroys this object. From this moment it will never receive notification about new
+         * turns.
+         */
         open fun destroy() {
             gameObjectsManager.destroyedObjects.add(this)
         }

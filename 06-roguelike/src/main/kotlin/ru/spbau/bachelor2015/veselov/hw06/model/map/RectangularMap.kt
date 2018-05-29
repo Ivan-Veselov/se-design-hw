@@ -4,6 +4,9 @@ import ru.spbau.bachelor2015.veselov.hw06.model.Vector2D
 
 class NotPassableCellException : Exception()
 
+/**
+ * A map that has a form of a rectangle.
+ */
 class RectangularMap(val width: Int, val height: Int) : StaticMap {
     override fun getNumberOfCells(): Int {
         return width * height
